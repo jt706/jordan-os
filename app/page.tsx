@@ -119,7 +119,8 @@ export default async function Dashboard() {
       >
         <div style={{ flex: 1, minWidth: 200 }}>
           <div style={{ fontWeight: 600, fontSize: 14, color: 'var(--text)', marginBottom: 2 }}>
-            <Brain size={16} weight="fill" style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/bellion-purple.png" alt="Bellion" style={{ width: 20, height: 20, objectFit: 'cover', borderRadius: 4, display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
             Bellion Summary
           </div>
           <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>

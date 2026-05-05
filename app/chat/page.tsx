@@ -314,15 +314,16 @@ function ChatPageInner() {
             width: 38,
             height: 38,
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, rgba(0,200,255,0.2), rgba(168,85,247,0.2))',
-            border: '1px solid rgba(0,200,255,0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 20,
+            overflow: 'hidden',
+            border: '1px solid rgba(124,58,237,0.5)',
+            boxShadow: '0 0 12px rgba(124,58,237,0.3)',
+            flexShrink: 0,
           }}
         >
-          {activeAgent ? activeAgent.avatar : <Brain size={20} weight="fill" color="var(--accent)" />}
+          {activeAgent
+            ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-elevated)', fontSize: 20 }}>{activeAgent.avatar}</div>
+            : <img src="/bellion.png" alt="Bellion" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          }
         </div>
         <div>
           <div style={{ fontWeight: 700, fontSize: 15 }}>
@@ -453,16 +454,16 @@ function ChatPageInner() {
                 width: 32,
                 height: 32,
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, rgba(0,200,255,0.2), rgba(168,85,247,0.2))',
-                border: '1px solid rgba(0,200,255,0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 16,
+                overflow: 'hidden',
+                border: '1px solid rgba(124,58,237,0.4)',
+                boxShadow: '0 0 8px rgba(124,58,237,0.25)',
                 flexShrink: 0,
               }}
             >
-              {activeAgent?.avatar ?? <Brain size={16} weight="fill" color="var(--accent)" />}
+              {activeAgent?.avatar
+                ? <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-elevated)', fontSize: 16 }}>{activeAgent.avatar}</div>
+                : <img src="/bellion.png" alt="Bellion" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              }
             </div>
             <div
               style={{
