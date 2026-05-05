@@ -81,15 +81,15 @@ export default async function Dashboard() {
     <div style={{ padding: '24px', maxWidth: 1100 }}>
       {/* Header */}
       <div className="animate-fade-up" style={{ marginBottom: 28 }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>
-          Jordan OS · Mission Control
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dim)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>
+          JT OS · Mission Control
         </div>
-        <h1 style={{ fontSize: 26, fontWeight: 700, margin: 0, letterSpacing: '-0.03em', color: 'var(--text)' }}>
-          Good morning, Jordan
-          <span style={{ marginLeft: 8 }}>👋</span>
+        <h1 style={{ fontSize: 28, fontWeight: 700, margin: 0, letterSpacing: '-0.04em' }}>
+          <span className="gradient-text">Good morning, JT</span>
         </h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: 14, marginTop: 4, marginBottom: 0 }}>
-          CEO Agent is online · {activeAgents} agent{activeAgents === 1 ? '' : 's'} active · {pendingDecisions.length} decision{pendingDecisions.length === 1 ? '' : 's'} pending
+        <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 6, marginBottom: 0, fontFamily: 'var(--font-mono)' }}>
+          <span style={{ color: 'var(--accent)' }}>●</span>
+          {' '}CEO online · {activeAgents} agent{activeAgents === 1 ? '' : 's'} active · {pendingDecisions.length} decision{pendingDecisions.length === 1 ? '' : 's'} pending
         </p>
       </div>
 
@@ -97,8 +97,8 @@ export default async function Dashboard() {
       <div
         className="animate-fade-up delay-1"
         style={{
-          background: 'linear-gradient(135deg, rgba(0,200,255,0.08) 0%, rgba(168,85,247,0.08) 100%)',
-          border: '1px solid rgba(0,200,255,0.2)',
+          background: 'linear-gradient(135deg, rgba(0,229,180,0.06) 0%, rgba(124,58,237,0.08) 100%)',
+          border: '1px solid rgba(0,229,180,0.15)',
           borderRadius: 12,
           padding: '16px 20px',
           display: 'flex',

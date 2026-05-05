@@ -332,7 +332,7 @@ function ChatPageInner() {
             <div className="pulse-online" />
             {activeAgent
               ? `Sub-agent · ${activeAgent.role}`
-              : 'Online · Jordan OS Mission Control'}
+              : 'Online · JT OS Mission Control'}
           </div>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>

@@ -9,8 +9,8 @@ const sections = [
     label: 'Identity',
     icon: Bot,
     fields: [
-      { id: 'name', label: 'Your Name', type: 'text', value: 'Jordan', description: 'Used in CEO Agent greetings' },
-      { id: 'org', label: 'Organisation Name', type: 'text', value: 'Jordan OS', description: 'Displayed in sidebar header' },
+      { id: 'name', label: 'Your Name', type: 'text', value: 'JT', description: 'Used in CEO Agent greetings' },
+      { id: 'org', label: 'Organisation Name', type: 'text', value: 'JT OS', description: 'Displayed in sidebar header' },
       { id: 'timezone', label: 'Timezone', type: 'text', value: 'Pacific/Auckland', description: 'Used for scheduling and timestamps' },
     ],
   },
@@ -29,7 +29,7 @@ const sections = [
     label: 'Safety & Autonomy',
     icon: Shield,
     toggles: [
-      { id: 'requireApproval', label: 'Require approval for all executions', value: true, description: 'Jordan must approve before Hermes or OpenClaw acts' },
+      { id: 'requireApproval', label: 'Require approval for all executions', value: true, description: 'JT must approve before Hermes or any agent acts' },
       { id: 'noRealWorld', label: 'Block autonomous real-world actions (v0.1)', value: true, description: 'No emails sent, no forms submitted, no purchases made without approval', locked: true },
       { id: 'highRiskAlert', label: 'Alert on high-risk decisions', value: true, description: 'CEO Agent flags decisions with risk > medium' },
       { id: 'autoKill', label: 'Auto-bench agents with negative ROI for 60+ days', value: false, description: 'Automatically bench underperforming agents' },
@@ -86,7 +86,7 @@ export default function SettingsPage() {
           Settings
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: 14, margin: 0 }}>
-          Jordan OS v0.1 configuration
+          JT OS v0.1 configuration
         </p>
       </div>
 
