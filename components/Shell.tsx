@@ -75,166 +75,68 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         className="hidden md:flex"
       >
         {/* ── Logo block ── */}
-        <div style={{ padding: '14px 10px 20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-            {/* JT monogram — bold isometric-inspired box */}
-            <div
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                background: 'linear-gradient(135deg, #7c3aed 0%, #c2ff00 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontFamily: 'var(--font-mono)',
-                fontSize: 14,
-                fontWeight: 700,
-                color: '#0d0520',
-                letterSpacing: '-0.03em',
-                flexShrink: 0,
-                boxShadow: '0 4px 16px rgba(124,58,237,0.4)',
-              }}
-            >
+        <div style={{ padding: '20px 12px 16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: 9,
+              background: 'linear-gradient(135deg, #7c3aed 0%, #c2ff00 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 12, fontWeight: 800, color: '#0d0520',
+              letterSpacing: '-0.02em', flexShrink: 0,
+              boxShadow: '0 2px 12px rgba(124,58,237,0.35)',
+            }}>
               JT
             </div>
             <div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 16,
-                  fontWeight: 700,
-                  color: 'var(--text)',
-                  letterSpacing: '-0.04em',
-                  lineHeight: 1.1,
-                }}
-              >
+              <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.03em', lineHeight: 1.2 }}>
                 JT OS
               </div>
-              <div
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 9,
-                  color: 'var(--text-muted)',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  marginTop: 2,
-                }}
-              >
+              <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 1, fontWeight: 400 }}>
                 Mission Control
               </div>
             </div>
           </div>
-
-          {/* Version pill */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              background: 'rgba(194,255,0,0.07)',
-              border: '1px solid rgba(194,255,0,0.18)',
-              borderRadius: 8,
-              padding: '3px 10px',
-            }}
-          >
-            <div style={{
-              width: 5, height: 5, borderRadius: '50%',
-              background: 'var(--accent)',
-              boxShadow: '0 0 8px var(--accent)',
-            }} />
-            <span style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 9,
-              color: 'var(--accent)',
-              letterSpacing: '0.06em',
-              fontWeight: 700,
-            }}>
-              v0.1 · ALPHA
-            </span>
-          </div>
-        </div>
-
-        {/* ── Nav label ── */}
-        <div style={{
-          padding: '0 10px 8px',
-          fontFamily: 'var(--font-mono)',
-          fontSize: 9,
-          color: 'var(--text-dim)',
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-        }}>
-          Navigate
         </div>
 
         {/* ── Nav items ── */}
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href;
-          return (
-            <Link key={item.href} href={item.href} className={`nav-item ${isActive ? 'active' : ''}`}>
-              <Icon
-                size={17}
-                weight={isActive ? 'fill' : 'regular'}
-              />
-              {item.label}
-              {item.href === '/decisions' && badges.decisions > 0 && (
-                <span style={{
-                  marginLeft: 'auto',
-                  background: 'rgba(255,68,102,0.15)',
-                  color: 'var(--red)',
-                  fontSize: 9,
-                  fontFamily: 'var(--font-mono)',
-                  padding: '2px 6px',
-                  borderRadius: 6,
-                  fontWeight: 700,
-                }}>
-                  {badges.decisions}
-                </span>
-              )}
-              {item.href === '/execution' && badges.execution > 0 && (
-                <span style={{
-                  marginLeft: 'auto',
-                  background: 'rgba(255,170,0,0.15)',
-                  color: 'var(--yellow)',
-                  fontSize: 9,
-                  fontFamily: 'var(--font-mono)',
-                  padding: '2px 6px',
-                  borderRadius: 6,
-                  fontWeight: 700,
-                }}>
-                  {badges.execution}
-                </span>
-              )}
-            </Link>
-          );
-        })}
+        <div style={{ padding: '4px 0', flex: 1 }}>
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+            return (
+              <Link key={item.href} href={item.href} className={`nav-item ${isActive ? 'active' : ''}`}>
+                <Icon size={16} weight={isActive ? 'fill' : 'regular'} style={{ opacity: isActive ? 1 : 0.6 }} />
+                {item.label}
+                {item.href === '/decisions' && badges.decisions > 0 && (
+                  <span style={{
+                    marginLeft: 'auto', background: 'rgba(255,68,102,0.12)',
+                    color: 'var(--red)', fontSize: 10, padding: '1px 6px',
+                    borderRadius: 20, fontWeight: 600,
+                  }}>
+                    {badges.decisions}
+                  </span>
+                )}
+                {item.href === '/execution' && badges.execution > 0 && (
+                  <span style={{
+                    marginLeft: 'auto', background: 'rgba(255,170,0,0.12)',
+                    color: 'var(--yellow)', fontSize: 10, padding: '1px 6px',
+                    borderRadius: 20, fontWeight: 600,
+                  }}>
+                    {badges.execution}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </div>
 
         {/* ── Bottom status ── */}
-        <div style={{ marginTop: 'auto', padding: '16px 10px 4px' }}>
-          <div style={{
-            height: 1,
-            background: 'linear-gradient(90deg, transparent, var(--border-bright), transparent)',
-            marginBottom: 14,
-          }} />
-          {/* Status card */}
-          <div style={{
-            background: 'rgba(194,255,0,0.05)',
-            border: '1px solid rgba(194,255,0,0.12)',
-            borderRadius: 10,
-            padding: '8px 10px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-          }}>
+        <div style={{ padding: '12px 12px 8px', borderTop: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 4px' }}>
             <div className="pulse-online" />
             <div>
-              <div style={{ fontSize: 11, color: 'var(--text)', fontWeight: 600, lineHeight: 1.2 }}>
-                CEO Agent
-              </div>
-              <div style={{ fontSize: 9, color: 'var(--accent)', fontFamily: 'var(--font-mono)', letterSpacing: '0.05em' }}>
-                ONLINE
-              </div>
+              <div style={{ fontSize: 12, color: 'var(--text)', fontWeight: 500 }}>CEO Agent</div>
+              <div style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 400 }}>Online</div>
             </div>
           </div>
         </div>
@@ -302,11 +204,8 @@ export default function Shell({ children }: { children: React.ReactNode }) {
             >
               <Icon size={22} weight={isActive ? 'fill' : 'regular'} />
               <span style={{
-                fontSize: 9,
-                fontWeight: isActive ? 700 : 400,
-                fontFamily: 'var(--font-mono)',
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
+                fontSize: 10,
+                fontWeight: isActive ? 600 : 400,
               }}>
                 {item.label.split(' ')[0]}
               </span>
@@ -328,15 +227,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           }}
         >
           <Gear size={22} weight={pathname === '/settings' ? 'fill' : 'regular'} />
-          <span style={{
-            fontSize: 9,
-            fontWeight: 400,
-            fontFamily: 'var(--font-mono)',
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase',
-          }}>
-            More
-          </span>
+          <span style={{ fontSize: 10, fontWeight: 400 }}>More</span>
         </Link>
       </nav>
     </div>

@@ -92,15 +92,12 @@ export default async function Dashboard() {
     <div style={{ padding: '24px', maxWidth: 1100 }}>
       {/* Header */}
       <div className="animate-fade-up" style={{ marginBottom: 28 }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-dim)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>
-          JT OS · Mission Control
-        </div>
-        <h1 style={{ fontSize: 28, fontWeight: 700, margin: 0, letterSpacing: '-0.04em' }}>
+        <h1 style={{ fontSize: 30, fontWeight: 700, margin: 0, letterSpacing: '-0.03em' }}>
           <span className="gradient-text">Good morning, JT</span>
         </h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 6, marginBottom: 0, fontFamily: 'var(--font-mono)' }}>
-          <span style={{ color: 'var(--accent)' }}>●</span>
-          {' '}CEO online · {activeAgents} agent{activeAgents === 1 ? '' : 's'} active · {pendingDecisions.length} decision{pendingDecisions.length === 1 ? '' : 's'} pending
+        <p style={{ color: 'var(--text-muted)', fontSize: 14, marginTop: 6, marginBottom: 0 }}>
+          <span style={{ color: 'var(--accent)', marginRight: 6 }}>●</span>
+          CEO online · {activeAgents} agent{activeAgents === 1 ? '' : 's'} active · {pendingDecisions.length} decision{pendingDecisions.length === 1 ? '' : 's'} pending
         </p>
       </div>
 
