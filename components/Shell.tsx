@@ -84,8 +84,8 @@ export default function Shell({ children }: { children: React.ReactNode }) {
                 width: 32,
                 height: 32,
                 borderRadius: 9,
-                background: 'linear-gradient(135deg, rgba(0,229,180,0.15), rgba(124,58,237,0.15))',
-                border: '1px solid rgba(0,229,180,0.25)',
+                background: 'linear-gradient(135deg, rgba(124,58,237,0.3), rgba(194,255,0,0.1))',
+                border: '1px solid rgba(124,58,237,0.4)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -133,8 +133,8 @@ export default function Shell({ children }: { children: React.ReactNode }) {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 5,
-              background: 'rgba(0,229,180,0.06)',
-              border: '1px solid rgba(0,229,180,0.12)',
+              background: 'rgba(194,255,0,0.07)',
+              border: '1px solid rgba(194,255,0,0.15)',
               borderRadius: 6,
               padding: '2px 8px',
             }}
@@ -142,7 +142,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
             <div style={{
               width: 5, height: 5, borderRadius: '50%',
               background: 'var(--accent)',
-              boxShadow: '0 0 5px var(--accent)',
+              boxShadow: '0 0 8px var(--accent)',
             }} />
             <span style={{
               fontFamily: 'var(--font-mono)',

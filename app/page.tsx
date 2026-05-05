@@ -97,8 +97,8 @@ export default async function Dashboard() {
       <div
         className="animate-fade-up delay-1"
         style={{
-          background: 'linear-gradient(135deg, rgba(0,229,180,0.06) 0%, rgba(124,58,237,0.08) 100%)',
-          border: '1px solid rgba(0,229,180,0.15)',
+          background: 'linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(194,255,0,0.05) 100%)',
+          border: '1px solid rgba(124,58,237,0.3)',
           borderRadius: 12,
           padding: '16px 20px',
           display: 'flex',
