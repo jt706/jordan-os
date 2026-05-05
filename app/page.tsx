@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { listAgents, listDecisions, listIdeas } from '@/lib/data/queries';
 import { listActions } from '@/lib/hermes';
-import { ArrowRight, Zap, Bot, Terminal, MessageSquare, CheckCircle2, AlertCircle, Loader2, Clock } from 'lucide-react';
+import { ArrowRight, Lightning, Robot, Terminal, ChatCircleDots, CheckCircle, XCircle, ArrowClockwise, Clock } from '@phosphor-icons/react/dist/ssr';
 
 // Dashboard is server-rendered. Every number on this page comes from the
 // database — no mocks. If a table is empty, the card shows zero. That's the
@@ -24,15 +24,15 @@ function relativeTime(d: Date): string {
 function statusIcon(status: string) {
   switch (status) {
     case 'completed':
-      return <CheckCircle2 size={12} color="var(--green)" />;
+      return <CheckCircle size={13} weight="fill" color="var(--green)" />;
     case 'failed':
-      return <AlertCircle size={12} color="var(--red)" />;
+      return <XCircle size={13} weight="fill" color="var(--red)" />;
     case 'running':
-      return <Loader2 size={12} color="var(--accent)" />;
+      return <ArrowClockwise size={13} weight="bold" color="var(--accent)" />;
     case 'pending_approval':
-      return <Clock size={12} color="var(--yellow)" />;
+      return <Clock size={13} weight="fill" color="var(--yellow)" />;
     default:
-      return <Clock size={12} color="var(--text-dim)" />;
+      return <Clock size={13} weight="regular" color="var(--text-dim)" />;
   }
 }
 
@@ -117,7 +117,7 @@ export default async function Dashboard() {
           </div>
         </div>
         <Link href="/chat" className="btn btn-cyan">
-          <MessageSquare size={14} />
+          <ChatCircleDots size={16} weight="fill" />
           Open Chat
         </Link>
       </div>
@@ -186,11 +186,11 @@ export default async function Dashboard() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Zap size={14} color="var(--yellow)" />
+              <Lightning size={16} weight="fill" color="var(--yellow)" />
               <span style={{ fontSize: 13, fontWeight: 600 }}>Pending Decisions</span>
             </div>
             <Link href="/decisions" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
-              All <ArrowRight size={12} />
+              All <ArrowRight size={13} weight="bold" />
             </Link>
           </div>
           <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -233,11 +233,11 @@ export default async function Dashboard() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Bot size={14} color="var(--accent)" />
+              <Robot size={16} weight="fill" color="var(--accent)" />
               <span style={{ fontSize: 13, fontWeight: 600 }}>Agent Status</span>
             </div>
             <Link href="/agents" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
-              All <ArrowRight size={12} />
+              All <ArrowRight size={13} weight="bold" />
             </Link>
           </div>
           <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -280,11 +280,11 @@ export default async function Dashboard() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Terminal size={14} color="var(--accent2)" />
+            <Terminal size={16} weight="fill" color="var(--accent2-bright)" />
             <span style={{ fontSize: 13, fontWeight: 600 }}>Hermes — Recent Activity</span>
           </div>
           <Link href="/execution" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
-            {pendingApprovals > 0 ? `${pendingApprovals} pending` : 'All'} <ArrowRight size={12} />
+            {pendingApprovals > 0 ? `${pendingApprovals} pending` : 'All'} <ArrowRight size={13} weight="bold" />
           </Link>
         </div>
         <div style={{ padding: '4px 0' }}>
@@ -360,15 +360,15 @@ function StatCard({
     tone === 'negative' ? 'var(--red)' :
     'var(--text-dim)';
   return (
-    <div className={`card animate-fade-up delay-${Math.min(delay, 8)}`} style={{ padding: '16px' }}>
-      <div style={{ fontSize: 22, marginBottom: 8 }}>{icon}</div>
+    <div className={`card animate-fade-up delay-${Math.min(delay, 8)}`} style={{ padding: '18px' }}>
+      <div style={{ fontSize: 26, marginBottom: 10, lineHeight: 1 }}>{icon}</div>
       <div
         className="mono"
-        style={{ fontSize: 22, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: 2 }}
+        style={{ fontSize: 28, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.03em', marginBottom: 3, lineHeight: 1 }}
       >
         {value}
       </div>
-      <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}>{label}</div>
+      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 4 }}>{label}</div>
       <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: subColor }}>
         {sub}
       </div>

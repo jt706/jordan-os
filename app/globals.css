@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -38,8 +38,8 @@
   --text-dim:        #3d2d6e;
 
   /* ── Typography ── */
-  --font-body:  'Inter', sans-serif;
-  --font-mono:  'JetBrains Mono', monospace;
+  --font-body:  'Space Grotesk', sans-serif;
+  --font-mono:  'Space Mono', monospace;
 }
 
 * { box-sizing: border-box; }
