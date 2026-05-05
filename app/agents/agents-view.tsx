@@ -15,6 +15,7 @@ import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Agent, AgentDivision, AgentStatus } from '@/lib/types';
 import { Activity, UserPlus, X, Search, Sparkles, ExternalLink, History, DollarSign, ChevronDown, ChevronUp } from 'lucide-react';
+import { Lightbulb, Robot } from '@phosphor-icons/react';
 
 const statusConfig: Record<AgentStatus, { label: string; color: string; dotClass: string }> = {
   active:  { label: 'Active',  color: 'var(--green)',    dotClass: 'pulse-online' },
@@ -206,7 +207,13 @@ export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }
                 <div className="mono" style={{ width: 20, fontSize: 12, color: 'var(--text-dim)', flexShrink: 0 }}>
                   #{i + 1}
                 </div>
-                <span style={{ fontSize: 22, flexShrink: 0 }}>{agent.avatar}</span>
+                <div style={{
+                  width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+                  background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.3)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Robot size={15} weight="fill" color="var(--accent2-bright)" />
+                </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5 }}>
                     <span style={{ fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>{agent.name}</span>
@@ -653,7 +660,8 @@ function AgentCard({
             marginBottom: 12,
           }}
         >
-          💡 {agent.recommendation}
+          <Lightbulb size={13} weight="fill" color="var(--yellow)" style={{ display: 'inline', verticalAlign: 'middle', marginRight: 5 }} />
+          {agent.recommendation}
         </div>
       )}
 

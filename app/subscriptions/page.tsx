@@ -1,5 +1,6 @@
 import { listSubscriptions } from '@/lib/data/queries';
 import { Subscription } from '@/lib/types';
+import { Lightbulb } from '@phosphor-icons/react/dist/ssr';
 
 const usageColors = {
   low: { bg: 'rgba(244,63,94,0.1)', text: 'var(--red)' },
@@ -153,7 +154,8 @@ function SubscriptionCard({ sub, index }: { sub: Subscription; index: number }) 
           paddingTop: 10,
         }}
       >
-        💡 {sub.recommendation}
+        <Lightbulb size={13} weight="fill" color="var(--yellow)" style={{ display: 'inline', verticalAlign: 'middle', marginRight: 5 }} />
+        {sub.recommendation}
       </div>
     </div>
   );

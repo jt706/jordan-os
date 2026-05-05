@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Message } from '@/lib/types';
 import { Send, Paperclip, Camera, Mic } from 'lucide-react';
+import { Brain, Robot } from '@phosphor-icons/react';
 import { createClient } from '@/lib/supabase/client';
 
 interface ActiveAgent {
@@ -45,7 +46,7 @@ function MessageBubble({ msg, agentName, agentAvatar }: { msg: Message; agentNam
             flexShrink: 0,
           }}
         >
-          {agentAvatar ?? '🧠'}
+          {agentAvatar ?? <Brain size={16} weight="fill" color="var(--accent)" />}
         </div>
       )}
 
@@ -187,7 +188,7 @@ function ChatPageInner() {
             .select('id, name, role, avatar')
             .eq('id', thread.agent_id)
             .maybeSingle();
-          if (a) agent = { id: a.id, name: a.name, role: a.role, avatar: a.avatar ?? '🤖' };
+          if (a) agent = { id: a.id, name: a.name, role: a.role, avatar: a.avatar ?? '' };
         }
 
         const { data: msgs, error: mErr } = await supabase
@@ -322,7 +323,7 @@ function ChatPageInner() {
             fontSize: 20,
           }}
         >
-          {activeAgent ? activeAgent.avatar : '🧠'}
+          {activeAgent ? activeAgent.avatar : <Brain size={20} weight="fill" color="var(--accent)" />}
         </div>
         <div>
           <div style={{ fontWeight: 700, fontSize: 15 }}>
@@ -462,7 +463,7 @@ function ChatPageInner() {
                 flexShrink: 0,
               }}
             >
-              {activeAgent?.avatar ?? '🧠'}
+              {activeAgent?.avatar ?? <Brain size={16} weight="fill" color="var(--accent)" />}
             </div>
             <div
               style={{
