@@ -1,40 +1,42 @@
 // Embedding helper for JT OS knowledge base.
 //
-// Uses OpenAI text-embedding-3-small (1536 dims, cheap, fast).
-// Requires OPENAI_API_KEY in environment.
-// If the key is missing the function returns null — callers must handle the null
-// and fall back to keyword search (ilike). This keeps the system functional
-// even without an OpenAI key configured.
+// Uses Voyage AI voyage-3 (1024 dims).
+// Anthropic's recommended embedding provider for Claude projects.
+// Free tier: 50M tokens/month — more than enough for JT OS.
+//
+// Requires VOYAGE_API_KEY in environment.
+// If the key is missing the function returns null — callers fall back to
+// keyword search (ilike). The system works without it.
 
-import OpenAI from 'openai';
+import { VoyageAIClient } from 'voyageai';
 
-const EMBEDDING_MODEL = 'text-embedding-3-small';
-const EMBEDDING_DIMS  = 1536;
+const EMBEDDING_MODEL = 'voyage-3';
+export const EMBEDDING_DIMS = 1024;
 
-export { EMBEDDING_DIMS };
+let _client: VoyageAIClient | null = null;
 
-let _client: OpenAI | null = null;
-
-function getClient(): OpenAI | null {
-  if (!process.env.OPENAI_API_KEY) return null;
-  if (!_client) _client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+function getClient(): VoyageAIClient | null {
+  if (!process.env.VOYAGE_API_KEY) return null;
+  if (!_client) _client = new VoyageAIClient({ apiKey: process.env.VOYAGE_API_KEY });
   return _client;
 }
 
 /**
  * Generate a single embedding vector for a string.
- * Returns null if OPENAI_API_KEY is not configured or the call fails.
+ * Returns null if VOYAGE_API_KEY is not configured or the call fails.
  */
 export async function generateEmbedding(text: string): Promise<number[] | null> {
   const client = getClient();
   if (!client) return null;
 
   try {
-    const response = await client.embeddings.create({
-      model: EMBEDDING_DIMS === 1536 ? EMBEDDING_MODEL : EMBEDDING_MODEL,
-      input: text.trim().slice(0, 8000), // model max is 8191 tokens
+    const response = await client.embed({
+      input: text.trim().slice(0, 16000), // voyage-3 context window
+      model: EMBEDDING_MODEL,
     });
-    return response.data[0].embedding;
+    const embedding = response.data?.[0]?.embedding;
+    if (!embedding || !Array.isArray(embedding)) return null;
+    return embedding as number[];
   } catch (err) {
     console.error('[embeddings] generateEmbedding failed:', err instanceof Error ? err.message : err);
     return null;
@@ -43,8 +45,7 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
 
 /**
  * Build the text to embed for a knowledge doc.
- * Combines title + category + content + tags so semantic search
- * matches on any of these dimensions.
+ * Combines all searchable fields so semantic search matches on any dimension.
  */
 export function docToEmbedText(doc: {
   title: string;
@@ -66,8 +67,8 @@ export function docToEmbedText(doc: {
 }
 
 /**
- * Returns true if the OpenAI key is configured and embeddings are available.
+ * Returns true if Voyage AI is configured and embeddings are available.
  */
 export function embeddingsAvailable(): boolean {
-  return Boolean(process.env.OPENAI_API_KEY);
+  return Boolean(process.env.VOYAGE_API_KEY);
 }

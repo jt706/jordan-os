@@ -1,14 +1,12 @@
--- ─── Vector memory for knowledge base ────────────────────────────────────────
--- Enables pgvector, adds embedding column, creates semantic search RPC.
--- Embedding model: Voyage AI voyage-3 (1024 dims)
--- Run in Supabase SQL editor BEFORE deploying the app.
+-- ─── Resize embedding column: 1536 → 1024 (Voyage AI voyage-3) ───────────────
+-- Run this if you already ran 0010 with OpenAI dims (1536).
+-- Safe: no embeddings exist yet so there is no data to lose.
 
-CREATE EXTENSION IF NOT EXISTS vector;
+DROP INDEX IF EXISTS knowledge_embedding_idx;
+ALTER TABLE knowledge DROP COLUMN IF EXISTS embedding;
+ALTER TABLE knowledge ADD COLUMN embedding vector(1024);
 
-ALTER TABLE knowledge
-  ADD COLUMN IF NOT EXISTS embedding vector(1024);
-
-CREATE INDEX IF NOT EXISTS knowledge_embedding_idx
+CREATE INDEX knowledge_embedding_idx
   ON knowledge USING hnsw (embedding vector_cosine_ops)
   WITH (m = 16, ef_construction = 64);
 
