@@ -258,7 +258,13 @@ export default async function Dashboard() {
                 <div
                   className={`pulse-${a.status === 'active' ? 'online' : a.status === 'idle' ? 'degraded' : 'offline'}`}
                 />
-                <span style={{ fontSize: 18 }}>{a.avatar}</span>
+                <div style={{
+                  width: 28, height: 28, borderRadius: 7, flexShrink: 0,
+                  background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.3)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Robot size={13} weight="fill" color="var(--accent2-bright)" />
+                </div>
                 <span style={{ fontSize: 13, flex: 1, color: 'var(--text)' }}>{a.name}</span>
                 <span
                   style={{
