@@ -1,17 +1,18 @@
 import Link from 'next/link';
 import { listAgents, listDecisions, listIdeas } from '@/lib/data/queries';
 import { listActions } from '@/lib/hermes';
-import { ArrowRight, Lightning, Robot, Terminal, ChatCircleDots, CheckCircle, XCircle, ArrowClockwise, Clock, Brain, Handshake, SealCheck, Lightbulb, ChartLineUp, MagnifyingGlass, Wrench, Money, Megaphone, Gear } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRight, Lightning, Robot, Terminal, ChatCircleDots, CheckCircle, XCircle, ArrowClockwise, Clock, Brain, Handshake, SealCheck, Lightbulb, UsersThree, Palette, Mountains, Sparkle, House, Buildings, Megaphone, Flask } from '@phosphor-icons/react/dist/ssr';
 import type { Icon } from '@phosphor-icons/react';
 
 const divisionConfig: Record<string, { icon: Icon; color: string; bg: string }> = {
-  Strategy:    { icon: ChartLineUp,      color: '#c2ff00',  bg: 'rgba(194,255,0,0.1)' },
-  Research:    { icon: MagnifyingGlass,  color: '#5bbcff',  bg: 'rgba(91,188,255,0.1)' },
-  Execution:   { icon: Wrench,           color: '#ff9500',  bg: 'rgba(255,149,0,0.1)' },
-  Finance:     { icon: Money,            color: '#00e096',  bg: 'rgba(0,224,150,0.1)' },
-  Marketing:   { icon: Megaphone,        color: '#ff4466',  bg: 'rgba(255,68,102,0.1)' },
-  Operations:  { icon: Gear,             color: '#a855f7',  bg: 'rgba(168,85,247,0.1)' },
-  Development: { icon: Terminal,         color: '#c2ff00',  bg: 'rgba(194,255,0,0.1)' },
+  'Agent HR':          { icon: UsersThree, color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
+  'Tuatahi':           { icon: Palette,    color: '#a855f7',  bg: 'rgba(168,85,247,0.08)' },
+  'Noa':               { icon: Mountains,  color: '#5bbcff',  bg: 'rgba(91,188,255,0.08)' },
+  'Sidekick AI':       { icon: Sparkle,    color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
+  'Personal':          { icon: House,      color: '#ff9500',  bg: 'rgba(255,149,0,0.08)' },
+  'Shared Services':   { icon: Buildings,  color: '#00e096',  bg: 'rgba(0,224,150,0.08)' },
+  'Marketing & Sales': { icon: Megaphone,  color: '#ff4466',  bg: 'rgba(255,68,102,0.08)' },
+  'Venture Studio':    { icon: Flask,      color: '#f59e0b',  bg: 'rgba(245,158,11,0.08)' },
 };
 
 // Dashboard is server-rendered. Every number on this page comes from the

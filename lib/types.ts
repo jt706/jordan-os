@@ -2,13 +2,14 @@
 
 export type AgentStatus = 'active' | 'idle' | 'benched' | 'killed';
 export type AgentDivision =
-  | 'Strategy'
-  | 'Research'
-  | 'Execution'
-  | 'Finance'
-  | 'Marketing'
-  | 'Operations'
-  | 'Development';
+  | 'Agent HR'
+  | 'Tuatahi'
+  | 'Noa'
+  | 'Sidekick AI'
+  | 'Personal'
+  | 'Shared Services'
+  | 'Marketing & Sales'
+  | 'Venture Studio';
 
 export type DecisionStatus = 'pending' | 'approved' | 'revised' | 'parked' | 'killed';
 export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';

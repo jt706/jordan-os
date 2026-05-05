@@ -15,16 +15,17 @@ import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Agent, AgentDivision, AgentStatus } from '@/lib/types';
 import { Activity, UserPlus, X, Search, Sparkles, ExternalLink, History, DollarSign, ChevronDown, ChevronUp } from 'lucide-react';
-import { Lightbulb, Robot, ChartLineUp, MagnifyingGlass, Wrench, Money, Megaphone, Gear, Terminal, type Icon } from '@phosphor-icons/react';
+import { Lightbulb, Robot, UsersThree, Palette, Mountains, Sparkle, House, Buildings, Megaphone, Flask, type Icon } from '@phosphor-icons/react';
 
 const divisionConfig: Record<string, { icon: Icon; color: string; bg: string }> = {
-  Strategy:    { icon: ChartLineUp,     color: '#c2ff00',  bg: 'rgba(194,255,0,0.1)' },
-  Research:    { icon: MagnifyingGlass, color: '#5bbcff',  bg: 'rgba(91,188,255,0.1)' },
-  Execution:   { icon: Wrench,          color: '#ff9500',  bg: 'rgba(255,149,0,0.1)' },
-  Finance:     { icon: Money,           color: '#00e096',  bg: 'rgba(0,224,150,0.1)' },
-  Marketing:   { icon: Megaphone,       color: '#ff4466',  bg: 'rgba(255,68,102,0.1)' },
-  Operations:  { icon: Gear,            color: '#a855f7',  bg: 'rgba(168,85,247,0.1)' },
-  Development: { icon: Terminal,        color: '#c2ff00',  bg: 'rgba(194,255,0,0.1)' },
+  'Agent HR':        { icon: UsersThree, color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
+  'Tuatahi':         { icon: Palette,    color: '#a855f7',  bg: 'rgba(168,85,247,0.08)' },
+  'Noa':             { icon: Mountains,  color: '#5bbcff',  bg: 'rgba(91,188,255,0.08)' },
+  'Sidekick AI':     { icon: Sparkle,    color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
+  'Personal':        { icon: House,      color: '#ff9500',  bg: 'rgba(255,149,0,0.08)' },
+  'Shared Services': { icon: Buildings,  color: '#00e096',  bg: 'rgba(0,224,150,0.08)' },
+  'Marketing & Sales': { icon: Megaphone, color: '#ff4466', bg: 'rgba(255,68,102,0.08)' },
+  'Venture Studio':  { icon: Flask,      color: '#f59e0b',  bg: 'rgba(245,158,11,0.08)' },
 };
 
 const statusConfig: Record<AgentStatus, { label: string; color: string; dotClass: string }> = {
@@ -34,7 +35,7 @@ const statusConfig: Record<AgentStatus, { label: string; color: string; dotClass
   killed:  { label: 'Killed',  color: 'var(--text-dim)', dotClass: 'pulse-offline' },
 };
 
-const DIVISIONS: AgentDivision[] = ['Strategy', 'Research', 'Execution', 'Finance', 'Marketing', 'Operations', 'Development'];
+const DIVISIONS: AgentDivision[] = ['Agent HR', 'Tuatahi', 'Noa', 'Sidekick AI', 'Personal', 'Shared Services', 'Marketing & Sales', 'Venture Studio'];
 
 // Classify agent role into hierarchy tier
 function getTier(role: string): 'lead' | 'senior' | 'agent' {
@@ -346,7 +347,7 @@ export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }
           {sorted.map((agent, i) => {
             const sc = statusConfig[agent.status];
             const barWidth = Math.min((agent.valueCreated / Math.max(sorted[0].valueCreated, 1)) * 100, 100);
-            const div = divisionConfig[agent.division] ?? divisionConfig['Operations'];
+            const div = divisionConfig[agent.division] ?? divisionConfig['Shared Services'];
             const DivIcon = div.icon;
             return (
               <div
@@ -437,7 +438,7 @@ function HireForm({ onCancel, onHired }: { onCancel: () => void; onHired: () => 
   const [tab, setTab] = useState<'manual' | 'browse'>('manual');
   const [name, setName] = useState('');
   const [role, setRole] = useState('');
-  const [division, setDivision] = useState<AgentDivision>('Operations');
+  const [division, setDivision] = useState<AgentDivision>('Shared Services');
   const [systemPrompt, setSystemPrompt] = useState('');
   const [capabilities, setCapabilities] = useState('');
   const [avatar, setAvatar] = useState('🤖');
@@ -758,7 +759,7 @@ function AgentCard({
   onLogValue: () => void;
 }) {
   const sc = statusConfig[agent.status];
-  const div = divisionConfig[agent.division] ?? divisionConfig['Operations'];
+  const div = divisionConfig[agent.division] ?? divisionConfig['Shared Services'];
   const DivIcon = div.icon;
   const [showHistory, setShowHistory] = useState(false);
   const isLive = agent.status !== 'killed';

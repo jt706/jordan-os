@@ -125,7 +125,7 @@ export const HANDLERS: Record<ActionKind, Handler> = {
   // ─── HR — agent lifecycle ────────────────────────────────────────────────
   hire_agent: async (payload) => {
     const division = payload.division;
-    const validDivisions: AgentDivision[] = ['Strategy', 'Research', 'Execution', 'Finance', 'Marketing', 'Operations', 'Development'];
+    const validDivisions: AgentDivision[] = ['Agent HR', 'Tuatahi', 'Noa', 'Sidekick AI', 'Personal', 'Shared Services', 'Marketing & Sales', 'Venture Studio'];
     if (typeof division !== 'string' || !validDivisions.includes(division as AgentDivision)) {
       throw new Error(`division must be one of: ${validDivisions.join(', ')}`);
     }
