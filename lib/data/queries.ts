@@ -6,6 +6,7 @@
 // Client components should query Supabase directly via `lib/supabase/client.ts`.
 
 import { createClient } from '@/lib/supabase/server';
+import { generateEmbedding, docToEmbedText, embeddingsAvailable } from '@/lib/data/embeddings';
 import type {
   Achievement,
   Agent,
@@ -136,12 +137,37 @@ export async function listKnowledge(): Promise<KnowledgeDoc[]> {
 }
 
 export async function searchKnowledge(query: string): Promise<KnowledgeDoc[]> {
+  const q = query.trim();
+  if (!q) return [];
+
+  // ── Semantic path (preferred) ──────────────────────────────────────────────
+  if (embeddingsAvailable()) {
+    const embedding = await generateEmbedding(q);
+    if (embedding) {
+      const supabase = await createClient();
+      const { data, error } = await supabase.rpc('search_knowledge_semantic', {
+        query_embedding: JSON.stringify(embedding),
+        match_count:     10,
+        min_similarity:  0.35,
+      });
+      if (!error && data && (data as unknown[]).length > 0) {
+        // rpc returns plain rows — map through rowToKnowledge then re-attach similarity
+        return (data as Record<string, unknown>[]).map((r) => rowToKnowledge(r as unknown as KnowledgeRow));
+      }
+      // If semantic returns nothing (new knowledge base with no embeddings yet),
+      // fall through to keyword search.
+    }
+  }
+
+  // ── Keyword fallback (ilike) ───────────────────────────────────────────────
   const supabase = await createClient();
-  const q = query.trim().toLowerCase();
+  const ql = q.toLowerCase();
   const { data, error } = await supabase
     .from('knowledge')
     .select('*')
-    .or(`title.ilike.%${q}%,content.ilike.%${q}%,category.ilike.%${q}%`)
+    .or(`title.ilike.%${ql}%,content.ilike.%${ql}%,category.ilike.%${ql}%`)
+    .in('status', ['active', 'draft'])
+    .order('authority_level', { ascending: true })
     .order('updated_at', { ascending: false })
     .limit(10);
   if (error) throw error;
