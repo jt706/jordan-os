@@ -1,4 +1,4 @@
-// Server-side typed query helpers for Jordan OS.
+// Server-side typed query helpers for JT OS.
 //
 // Each function reads a real table and shapes rows to match the TS types
 // in `lib/types.ts`. No mock data anywhere — pages get real numbers or an

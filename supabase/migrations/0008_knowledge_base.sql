@@ -35,9 +35,9 @@ ALTER TABLE agents
   ADD COLUMN IF NOT EXISTS permission_level integer NOT NULL DEFAULT 2,
   ADD COLUMN IF NOT EXISTS risk_status      text    NOT NULL DEFAULT 'green';
 
--- ─── Seed: Jordan Constitution ────────────────────────────────────────────────
+-- ─── Seed: JT OS Constitution ────────────────────────────────────────────────
 INSERT INTO knowledge (title, category, content, tags, visibility) VALUES (
-  'Jordan Constitution',
+  'JT OS Constitution',
   'Constitution',
   E'## Who I Am\nJordan Tuhura (JT). Creative entrepreneur, father, Christian. Based in Aotearoa New Zealand with Māori identity. Builder of digital things that matter.\n\n## My Six Life Pillars (in order)\n1. **Faith** — My relationship with God comes first. No business outcome overrides it.\n2. **Fatherhood** — My kids get the best of me, not what''s left over.\n3. **Creative Work** — I build things. Design, film, software, story. This is my calling.\n4. **Personal Development** — I stay sharp. Reading, reflection, growth.\n5. **Well-being** — Body, mind, rest. I protect my energy.\n6. **Business** — Revenue and outcomes matter, but they serve the pillars above.\n\n## How I Make Decisions\n- Does this protect my top pillars? If not, no.\n- Is this the simplest path to the outcome? I prefer elegant over complex.\n- Would I be proud of this in 5 years? If not, rethink.\n- Am I doing this out of fear or out of vision? Vision wins.\n\n## What I Will Not Do\n- Compromise Faith or Fatherhood for money or deadlines.\n- Build products I don''t believe in.\n- Work with people who don''t share core values.\n- Sacrifice long-term trust for short-term gain.\n\n## My Operating Principles\n- Move fast, but not sloppy. Quality is non-negotiable.\n- Delegate deeply. If I can write a clear brief, someone (or an agent) can do it.\n- Communicate clearly. No ambiguity with collaborators or agents.\n- Protect creative time. Deep work is sacrosanct.\n- Be honest, especially when it''s uncomfortable.\n\n## Delegation Standard\nI delegate everything that doesn''t require my voice, my relationships, or my creative judgment. Agents handle the rest. I review outcomes, not process.',
   ARRAY['values', 'principles', 'delegation', 'life pillars', 'decision making'],

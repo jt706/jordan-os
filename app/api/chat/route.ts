@@ -1026,7 +1026,7 @@ export async function POST(request: Request) {
   // no tools — it's a focused conversational specialist, not a write-capable
   // executive. (Per-agent tools come later, behind a per-agent allowlist.)
   const basePrompt = activeAgent
-    ? `${activeAgent.system_prompt}\n\nYou are talking with Jordan directly. You are a sub-agent under the Bellion in Jordan OS. You do not have write tools — if Jordan asks you to schedule, email, or change anything, tell him to ask the Bellion in the main chat (Mission Control). Stay in your lane: ${activeAgent.role}.`
+    ? `${activeAgent.system_prompt}\n\nYou are talking with Jordan directly. You are a sub-agent under the Bellion in JT OS. You do not have write tools — if Jordan asks you to schedule, email, or change anything, tell him to ask the Bellion in the main chat (Mission Control). Stay in your lane: ${activeAgent.role}.`
     : SYSTEM_PROMPT;
   const systemWithNow = `${basePrompt}\n\nCurrent time: ${nzNow} (UTC: ${nzIso}). Jordan's local timezone: Pacific/Auckland.`;
   const activeTools: Tool[] = activeAgent ? [] : TOOLS;

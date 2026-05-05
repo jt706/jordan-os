@@ -19,7 +19,7 @@ CREATE INDEX IF NOT EXISTS knowledge_status_idx    ON knowledge (status);
 
 -- ─── Backfill existing seed docs with authority ───────────────────────────────
 UPDATE knowledge SET authority_level = 'constitutional', applies_to = '{global}', version = '1.0'
-  WHERE title = 'Jordan Constitution';
+  WHERE title = 'JT OS Constitution';
 
 UPDATE knowledge SET authority_level = 'policy', applies_to = '{global,all_agents}', version = '1.0'
   WHERE title = 'Agent Discipline Framework';

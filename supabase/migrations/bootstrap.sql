@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════════════════
--- Jordan OS — Bootstrap (combines 0001..0005 into one paste)
+-- JT OS — Bootstrap (combines 0001..0005 into one paste)
 -- ════════════════════════════════════════════════════════════════════════════
 -- For fresh Supabase projects. Open this file, select all, paste into the
 -- Supabase SQL editor, run. One paste, no follow-ups.

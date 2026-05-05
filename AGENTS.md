@@ -6,7 +6,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # No mock data in production paths
 
-Jordan OS is an agent system. The CEO Agent and downstream agents read directly from the same tables and pages a human would see. **Mock data anywhere in a rendered page or queried table will be treated as real by the agents and will distort their recommendations.**
+JT OS is an agent system. The CEO Agent and downstream agents read directly from the same tables and pages a human would see. **Mock data anywhere in a rendered page or queried table will be treated as real by the agents and will distort their recommendations.**
 
 Rules:
 - Never add a mock-data fallback to a page that's wired to Supabase. If the DB is empty, render an empty state — that's the honest signal.

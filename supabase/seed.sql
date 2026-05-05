@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════════════════
--- Jordan OS — Seed Data
+-- JT OS — Seed Data
 -- ════════════════════════════════════════════════════════════════════════════
 -- Mirrors lib/mock-data.ts so the dashboard isn't empty after the schema
 -- migration runs. Idempotent: drop everything first, then re-insert.
@@ -103,7 +103,7 @@ insert into subscriptions (name, provider, monthly_cost, renewal_date, usage, va
   ('Perplexity Pro',  'Perplexity AI', 20,  '2025-05-20', 'medium', 6.8, 'Review. Research Agent may replace this with free tier.',      'AI Research',        '🔍'),
   ('Claude Code',     'Anthropic',     100, '2025-05-09', 'high',   9.4, 'Keep. High value for Dev Agent and OpenClaw builds.',          'Dev Tools',          '⌨️'),
   ('Vercel Pro',      'Vercel',        20,  '2025-06-01', 'medium', 8.0, 'Keep. Core deployment infrastructure.',                        'Infrastructure',     '▲'),
-  ('Notion',          'Notion',        16,  '2025-05-25', 'low',    4.2, 'Cancel. Jordan OS replaces most use cases.',                   'Productivity',       '📓'),
+  ('Notion',          'Notion',        16,  '2025-05-25', 'low',    4.2, 'Cancel. JT OS replaces most use cases.',                      'Productivity',       '📓'),
   ('Linear',          'Linear',        8,   '2025-05-18', 'medium', 7.5, 'Keep. Execution Hub integration planned.',                     'Project Management', '🎯'),
   ('Midjourney',      'Midjourney',    10,  '2025-05-12', 'low',    3.8, 'Cancel. Flux via Replicate API is cheaper and better.',        'AI Image',           '🎨');
 
@@ -117,8 +117,8 @@ insert into achievements (title, description, value_created, responsible_agent, 
    'Finance Agent identified 4 redundant subscriptions. Cancelled Notion, Zapier, and downgraded GitHub.',
    2160, 'Finance Agent', 'Cost Saving', '2025-04-15T00:00:00Z', true),
 
-  ('Jordan OS v0.1 Built in 1 Day',
-   'Claude Code and Dev Agent collaborated to scaffold the full Jordan OS Mission Control in under 8 hours.',
+  ('JT OS v0.1 Built in 1 Day',
+   'Claude Code and Dev Agent collaborated to scaffold the full JT OS Mission Control in under 8 hours.',
    5000, 'Dev Agent + Claude Code', 'Innovation', '2025-05-03T00:00:00Z', false),
 
   ('GTM Strategy for OpenClaw',
@@ -141,11 +141,11 @@ insert into ideas (title, summary, opportunity_score, recommended_path, capital_
    200, 'Research Agent to size market and identify top 5 competitors',
    'validated', array['SaaS','AI','Freelance','Finance'], '2025-05-01T00:00:00Z'),
 
-  ('Jordan OS — Public SaaS Version',
-   'Package Jordan OS as a SaaS product for founders and solopreneurs. $49–$99/mo. High demand for AI OS tooling.',
+  ('JT OS — Public SaaS Version',
+   'Package JT OS as a SaaS product for founders and solopreneurs. $49–$99/mo. High demand for AI OS tooling.',
    88, 'Build on current codebase. Target 100 beta waitlist before building.',
    0, 'Build waitlist landing page. Share in founder communities.',
-   'raw', array['SaaS','AI OS','Founders','Jordan OS'], '2025-05-03T00:00:00Z'),
+   'raw', array['SaaS','AI OS','Founders','JT OS'], '2025-05-03T00:00:00Z'),
 
   ('OpenClaw Enterprise Tier',
    'Add team accounts and white-label to OpenClaw. 3 inbound requests from agencies already.',
@@ -154,7 +154,7 @@ insert into ideas (title, summary, opportunity_score, recommended_path, capital_
    'validated', array['OpenClaw','Enterprise','Revenue'], '2025-04-22T00:00:00Z'),
 
   ('Prompt Engineering Course',
-   'Document Jordan OS workflows into a $197 course. Leverage existing audience.',
+   'Document JT OS workflows into a $197 course. Leverage existing audience.',
    62, 'Create 5 free YouTube videos first. Validate demand before building full course.',
    0, 'Record first 2 videos. Post to YouTube.',
    'raw', array['Education','Content','AI'], '2025-04-18T00:00:00Z'),

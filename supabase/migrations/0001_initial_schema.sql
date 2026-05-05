@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════════════════
--- Jordan OS — Initial Schema (JT OS)
+-- JT OS — Initial Schema
 -- ════════════════════════════════════════════════════════════════════════════
 -- Mirrors lib/types.ts. Single-user app today, designed to migrate cleanly
 -- to multi-user / shared-org later via the user_id column on every row.
