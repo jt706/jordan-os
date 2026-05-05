@@ -11,6 +11,7 @@ import type {
   Agent,
   Decision,
   Idea,
+  KnowledgeDoc,
   Message,
   Subscription,
   Thread,
@@ -116,6 +117,32 @@ export async function listIdeas(): Promise<Idea[]> {
     .order('opportunity_score', { ascending: false });
   if (error) throw error;
   return (data ?? []).map(rowToIdea);
+}
+
+// ─── Knowledge Base ──────────────────────────────────────────────────────────
+
+export async function listKnowledge(): Promise<KnowledgeDoc[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('knowledge')
+    .select('*')
+    .order('category', { ascending: true })
+    .order('title', { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map(rowToKnowledge);
+}
+
+export async function searchKnowledge(query: string): Promise<KnowledgeDoc[]> {
+  const supabase = await createClient();
+  const q = query.trim().toLowerCase();
+  const { data, error } = await supabase
+    .from('knowledge')
+    .select('*')
+    .or(`title.ilike.%${q}%,content.ilike.%${q}%,category.ilike.%${q}%`)
+    .order('updated_at', { ascending: false })
+    .limit(10);
+  if (error) throw error;
+  return (data ?? []).map(rowToKnowledge);
 }
 
 // ─── Row → TS type mappers ───────────────────────────────────────────────────
@@ -306,5 +333,31 @@ function rowToIdea(r: IdeaRow): Idea {
     stage: r.stage,
     createdAt: new Date(r.created_at),
     tags: r.tags ?? [],
+  };
+}
+
+interface KnowledgeRow {
+  id: string;
+  title: string;
+  category: KnowledgeDoc['category'];
+  content: string;
+  tags: string[] | null;
+  division: string | null;
+  visibility: KnowledgeDoc['visibility'];
+  created_at: string;
+  updated_at: string;
+}
+
+function rowToKnowledge(r: KnowledgeRow): KnowledgeDoc {
+  return {
+    id: r.id,
+    title: r.title,
+    category: r.category,
+    content: r.content,
+    tags: r.tags ?? [],
+    division: r.division,
+    visibility: r.visibility,
+    createdAt: new Date(r.created_at),
+    updatedAt: new Date(r.updated_at),
   };
 }

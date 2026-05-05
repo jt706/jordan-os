@@ -16,6 +16,7 @@ import {
   Terminal,
   PlugsConnected,
   Gear,
+  BookOpen,
 } from '@phosphor-icons/react';
 
 const navItems = [
@@ -28,6 +29,7 @@ const navItems = [
   { href: '/achievements',  label: 'Achievements',  icon: Trophy },
   { href: '/ideas',         label: 'Ideas',         icon: Lightbulb },
   { href: '/money',         label: 'Money',         icon: CurrencyDollar },
+  { href: '/knowledge',     label: 'Knowledge',     icon: BookOpen },
   { href: '/execution',     label: 'Execution',     icon: Terminal },
   { href: '/integrations',  label: 'Integrations',  icon: PlugsConnected },
   { href: '/settings',      label: 'Settings',      icon: Gear },

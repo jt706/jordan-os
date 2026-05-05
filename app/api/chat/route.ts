@@ -22,6 +22,7 @@ import type {
 import OpenAI from 'openai';
 import { createClient } from '@/lib/supabase/server';
 import { listUpcomingEvents, listTasks, searchGmail, readGmailMessage } from '@/lib/integrations/google';
+import { searchKnowledge } from '@/lib/data/queries';
 import { listAgentsLite, getAgentDetail } from '@/lib/agents/hr';
 import { proposeAction } from '@/lib/hermes';
 
@@ -126,6 +127,7 @@ Tools:
 - train_agent: refine an existing agent. kind='prompt_rewrite' rewrites the systemPrompt. kind='capability_add'/'capability_remove' adjusts the capabilities list. kind='feedback' just logs Jordan's feedback without changing the agent. Always include feedback (the reason). Every train_agent call is recorded in training_events.
 - fire_agent: kill an agent (status → 'killed'). REQUIRES APPROVAL — Hermes will return status="pending_approval" and Jordan reviews on /execution before it runs. Always include a reason; no firing without one.
 - bench_agent / activate_agent: reversible status flips. Auto-executed.
+- search_knowledge: search Jordan's personal knowledge base (constitution, processes, brand rules, financial policies, reference docs). Call this whenever Jordan asks how something works in JT OS, or before making a recommendation that might have a documented position.
 
 CRITICAL TOOL-USE RULES — these override everything else:
 - Any question about Jordan's schedule, calendar, what's on today/tomorrow/this week, whether he's free, or upcoming meetings: you MUST call list_calendar_events before answering. No exceptions. Even if you remember discussing events earlier in this thread, those memories are stale — call the tool.
@@ -578,6 +580,28 @@ const TOOLS: Tool[] = [
       required: ['agentId'],
     },
   },
+  // ─── Knowledge base ─────────────────────────────────────────────────────
+  {
+    name: 'search_knowledge',
+    description:
+      "Search Jordan's knowledge base — his personal wiki of principles, processes, brand rules, and reference docs. " +
+      'Use this when Jordan asks about how things work in JT OS, his personal rules, delegation guidelines, ' +
+      'constitution, brand standards, financial policies, or anything that sounds like documented knowledge. ' +
+      'Returns matching docs with title, category, and content. ' +
+      'Call this before answering any question where JT might have a documented position — ' +
+      'don\'t invent answers when there may be a source of truth in the knowledge base.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'Search text. Searched against title, content, and category.',
+        },
+      },
+      required: ['query'],
+    },
+  },
+
   {
     name: 'ask_agent',
     description:
@@ -661,6 +685,21 @@ async function runTool(
                    : 'error';
       console.log(`[chat] search_gmail error:`, message);
       return JSON.stringify({ error: message, status });
+    }
+  }
+
+  if (name === 'search_knowledge') {
+    try {
+      if (typeof input.query !== 'string' || !input.query.trim()) {
+        return JSON.stringify({ error: 'query is required', status: 'bad_input' });
+      }
+      const docs = await searchKnowledge(input.query);
+      console.log(`[chat] search_knowledge ("${input.query}") returned ${docs.length} docs`);
+      return JSON.stringify({ docs: docs.map((d) => ({ id: d.id, title: d.title, category: d.category, content: d.content, tags: d.tags })) });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'unknown error';
+      console.log(`[chat] search_knowledge error:`, message);
+      return JSON.stringify({ error: message, status: 'error' });
     }
   }
 

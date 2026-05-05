@@ -177,6 +177,31 @@ export interface PendingApproval {
   riskLevel: RiskLevel;
 }
 
+// ─── Knowledge Base ──────────────────────────────────────────────────────────
+
+export type KnowledgeVisibility = 'bellion' | 'all' | 'private';
+export type KnowledgeCategory =
+  | 'Constitution'
+  | 'Process'
+  | 'Brand'
+  | 'Finance'
+  | 'People'
+  | 'Product'
+  | 'Strategy'
+  | 'Reference';
+
+export interface KnowledgeDoc {
+  id: string;
+  title: string;
+  category: KnowledgeCategory;
+  content: string;
+  tags: string[];
+  division: string | null;
+  visibility: KnowledgeVisibility;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 // ─── Dashboard ───────────────────────────────────────────────────────────────
 
 export interface DashboardStat {
