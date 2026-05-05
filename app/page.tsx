@@ -1,8 +1,18 @@
 import Link from 'next/link';
 import { listAgents, listDecisions, listIdeas } from '@/lib/data/queries';
 import { listActions } from '@/lib/hermes';
-import { ArrowRight, Lightning, Robot, Terminal, ChatCircleDots, CheckCircle, XCircle, ArrowClockwise, Clock, Brain, Handshake, SealCheck, Lightbulb } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRight, Lightning, Robot, Terminal, ChatCircleDots, CheckCircle, XCircle, ArrowClockwise, Clock, Brain, Handshake, SealCheck, Lightbulb, ChartLineUp, MagnifyingGlass, Wrench, Money, Megaphone, Gear } from '@phosphor-icons/react/dist/ssr';
 import type { Icon } from '@phosphor-icons/react';
+
+const divisionConfig: Record<string, { icon: Icon; color: string; bg: string }> = {
+  Strategy:    { icon: ChartLineUp,      color: '#c2ff00',  bg: 'rgba(194,255,0,0.1)' },
+  Research:    { icon: MagnifyingGlass,  color: '#5bbcff',  bg: 'rgba(91,188,255,0.1)' },
+  Execution:   { icon: Wrench,           color: '#ff9500',  bg: 'rgba(255,149,0,0.1)' },
+  Finance:     { icon: Money,            color: '#00e096',  bg: 'rgba(0,224,150,0.1)' },
+  Marketing:   { icon: Megaphone,        color: '#ff4466',  bg: 'rgba(255,68,102,0.1)' },
+  Operations:  { icon: Gear,             color: '#a855f7',  bg: 'rgba(168,85,247,0.1)' },
+  Development: { icon: Terminal,         color: '#c2ff00',  bg: 'rgba(194,255,0,0.1)' },
+};
 
 // Dashboard is server-rendered. Every number on this page comes from the
 // database — no mocks. If a table is empty, the card shows zero. That's the
@@ -253,17 +263,21 @@ export default async function Dashboard() {
                 No agents in registry.
               </div>
             )}
-            {agents.slice(0, 5).map((a) => (
+            {agents.slice(0, 5).map((a) => {
+              const div = divisionConfig[a.division] ?? divisionConfig['Operations'];
+              const DivIcon = div.icon;
+              return (
               <div key={a.id} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div
                   className={`pulse-${a.status === 'active' ? 'online' : a.status === 'idle' ? 'degraded' : 'offline'}`}
                 />
                 <div style={{
                   width: 28, height: 28, borderRadius: 7, flexShrink: 0,
-                  background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.3)',
+                  background: div.bg,
+                  border: `1px solid color-mix(in srgb, ${div.color} 30%, transparent)`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <Robot size={13} weight="fill" color="var(--accent2-bright)" />
+                  <DivIcon size={13} weight="fill" color={div.color} />
                 </div>
                 <span style={{ fontSize: 13, flex: 1, color: 'var(--text)' }}>{a.name}</span>
                 <span
@@ -276,7 +290,8 @@ export default async function Dashboard() {
                   {a.status}
                 </span>
               </div>
-            ))}
+            );
+            })}
           </div>
         </div>
       </div>
