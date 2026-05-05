@@ -15,7 +15,7 @@ import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Agent, AgentDivision, AgentStatus } from '@/lib/types';
 import { Activity, UserPlus, X, Search, Sparkles, ExternalLink, History, DollarSign, ChevronDown, ChevronUp } from 'lucide-react';
-import { Lightbulb, Robot, UsersThree, Palette, Mountains, Sparkle, House, Buildings, Megaphone, Flask, type Icon } from '@phosphor-icons/react';
+import { Lightbulb, Robot, UsersThree, Palette, Mountains, Sparkle, House, Buildings, Megaphone, Flask, Crown, Medal, Star, Sword, Shield, Ghost, type Icon } from '@phosphor-icons/react';
 
 const divisionConfig: Record<string, { icon: Icon; color: string; bg: string }> = {
   'Agent HR':        { icon: UsersThree, color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
@@ -64,13 +64,13 @@ const RANK_ORDER: ShadowRank[] = [
   'grand-marshall', 'marshall', 'general', 'elite-knight', 'knight', 'shadow-soldier',
 ];
 
-const rankConfig: Record<ShadowRank, { label: string; short: string; color: string; bg: string }> = {
-  'grand-marshall': { label: 'Grand Marshall', short: 'Grand Marshall', color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
-  'marshall':       { label: 'Marshall',       short: 'Marshall',       color: '#f59e0b',  bg: 'rgba(245,158,11,0.08)' },
-  'general':        { label: 'General',        short: 'General',        color: '#a855f7',  bg: 'rgba(168,85,247,0.08)' },
-  'elite-knight':   { label: 'Elite Knight',   short: 'Elite Knight',   color: '#5bbcff',  bg: 'rgba(91,188,255,0.08)' },
-  'knight':         { label: 'Knight',         short: 'Knight',         color: '#9ca3af',  bg: 'rgba(156,163,175,0.07)' },
-  'shadow-soldier': { label: 'Shadow Soldier', short: 'Shadow',         color: '#6b7280',  bg: 'rgba(107,114,128,0.06)' },
+const rankConfig: Record<ShadowRank, { label: string; short: string; color: string; bg: string; icon: Icon }> = {
+  'grand-marshall': { label: 'Grand Marshall', short: 'Grand Marshall', color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)',   icon: Crown  },
+  'marshall':       { label: 'Marshall',       short: 'Marshall',       color: '#f59e0b',  bg: 'rgba(245,158,11,0.08)',  icon: Medal  },
+  'general':        { label: 'General',        short: 'General',        color: '#a855f7',  bg: 'rgba(168,85,247,0.08)',  icon: Star   },
+  'elite-knight':   { label: 'Elite Knight',   short: 'Elite Knight',   color: '#5bbcff',  bg: 'rgba(91,188,255,0.08)',  icon: Sword  },
+  'knight':         { label: 'Knight',         short: 'Knight',         color: '#9ca3af',  bg: 'rgba(156,163,175,0.07)', icon: Shield },
+  'shadow-soldier': { label: 'Shadow Soldier', short: 'Shadow',         color: '#6b7280',  bg: 'rgba(107,114,128,0.06)', icon: Ghost  },
 };
 
 export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }) {
@@ -284,15 +284,18 @@ export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }
                 {/* Rank sections */}
                 {byRank.map(({ rank, list }) => {
                   const rc = rankConfig[rank];
+                  const RankIcon = rc.icon;
                   return (
                     <div key={rank} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
                       <div style={{
-                        padding: '6px 18px', fontSize: 9, fontFamily: 'var(--font-mono)',
-                        color: rc.color, letterSpacing: '0.1em', textTransform: 'uppercase',
+                        padding: '5px 18px', display: 'flex', alignItems: 'center', gap: 6,
                         background: `color-mix(in srgb, ${rc.color} 4%, transparent)`,
                         borderBottom: `1px solid color-mix(in srgb, ${rc.color} 10%, transparent)`,
                       }}>
-                        {rc.label}
+                        <RankIcon size={11} weight="fill" color={rc.color} />
+                        <span style={{ fontSize: 9, fontFamily: 'var(--font-mono)', color: rc.color, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                          {rc.label}
+                        </span>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
                         {list.map((agent, idx) => {
@@ -316,9 +319,13 @@ export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }
                                 <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                   {agent.name}
                                 </div>
-                                <div style={{ fontSize: 10, color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                  <span style={{ color: rc.color, fontFamily: 'var(--font-mono)', marginRight: 4 }}>{rc.short}</span>
-                                  {agent.role.length > 36 ? agent.role.slice(0, 36) + '…' : agent.role}
+                                <div style={{ fontSize: 10, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 3, overflow: 'hidden' }}>
+                                  <RankIcon size={9} weight="fill" color={rc.color} style={{ flexShrink: 0 }} />
+                                  <span style={{ color: rc.color, fontFamily: 'var(--font-mono)', fontSize: 9, flexShrink: 0 }}>{rc.short}</span>
+                                  <span style={{ color: 'var(--text-dim)', flexShrink: 0 }}>·</span>
+                                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                    {agent.role.length > 34 ? agent.role.slice(0, 34) + '…' : agent.role}
+                                  </span>
                                 </div>
                               </div>
                               <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
@@ -808,15 +815,18 @@ function AgentCard({
             <span style={{ fontWeight: 700, fontSize: 14 }}>{agent.name}</span>
             <div className={sc.dotClass} />
           </div>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}>
+          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
             {(() => {
               const rank = getRank(agent.role);
               const rc = rankConfig[rank];
+              const RankIcon = rc.icon;
               return (
-                <span>
-                  <span style={{ color: rc.color, fontFamily: 'var(--font-mono)', fontSize: 10, marginRight: 5 }}>{rc.short}</span>
-                  {agent.role}
-                </span>
+                <>
+                  <RankIcon size={11} weight="fill" color={rc.color} style={{ flexShrink: 0 }} />
+                  <span style={{ color: rc.color, fontFamily: 'var(--font-mono)', fontSize: 10 }}>{rc.short}</span>
+                  <span style={{ color: 'var(--text-dim)', fontSize: 10 }}>·</span>
+                  <span>{agent.role}</span>
+                </>
               );
             })()}
           </div>
