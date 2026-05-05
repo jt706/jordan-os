@@ -12,6 +12,9 @@ import type {
   Decision,
   Idea,
   KnowledgeDoc,
+  KnowledgeAuthority,
+  KnowledgeScope,
+  KnowledgeStatus,
   Message,
   Subscription,
   Thread,
@@ -344,6 +347,13 @@ interface KnowledgeRow {
   tags: string[] | null;
   division: string | null;
   visibility: KnowledgeDoc['visibility'];
+  authority_level: KnowledgeAuthority | null;
+  applies_to: KnowledgeScope[] | null;
+  status: KnowledgeStatus | null;
+  version: string | null;
+  reviewed_at: string | null;
+  reviewed_by: string | null;
+  supersedes_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -357,6 +367,13 @@ function rowToKnowledge(r: KnowledgeRow): KnowledgeDoc {
     tags: r.tags ?? [],
     division: r.division,
     visibility: r.visibility,
+    authorityLevel: r.authority_level ?? 'reference',
+    appliesTo: r.applies_to ?? ['global'],
+    status: r.status ?? 'active',
+    version: r.version ?? '1.0',
+    reviewedAt: r.reviewed_at ? new Date(r.reviewed_at) : null,
+    reviewedBy: r.reviewed_by ?? null,
+    supersedesId: r.supersedes_id ?? null,
     createdAt: new Date(r.created_at),
     updatedAt: new Date(r.updated_at),
   };

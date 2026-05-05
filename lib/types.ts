@@ -190,6 +190,31 @@ export type KnowledgeCategory =
   | 'Strategy'
   | 'Reference';
 
+// Authority hierarchy — higher = more binding.
+// constitutional (1) > policy (2) > division_rule (3) > sop (4) > reference (5) > draft (-)
+export type KnowledgeAuthority =
+  | 'constitutional'
+  | 'policy'
+  | 'division_rule'
+  | 'sop'
+  | 'reference'
+  | 'draft';
+
+// Which agents / divisions this doc applies to.
+export type KnowledgeScope =
+  | 'global'
+  | 'bellion'
+  | 'hermes'
+  | 'agent_hr'
+  | 'tuatahi'
+  | 'noa'
+  | 'sidekick_ai'
+  | 'personal'
+  | 'shared_services'
+  | 'all_agents';
+
+export type KnowledgeStatus = 'draft' | 'active' | 'deprecated' | 'archived';
+
 export interface KnowledgeDoc {
   id: string;
   title: string;
@@ -198,6 +223,14 @@ export interface KnowledgeDoc {
   tags: string[];
   division: string | null;
   visibility: KnowledgeVisibility;
+  // Authority system
+  authorityLevel: KnowledgeAuthority;
+  appliesTo: KnowledgeScope[];
+  status: KnowledgeStatus;
+  version: string;
+  reviewedAt: Date | null;
+  reviewedBy: string | null;
+  supersedesId: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

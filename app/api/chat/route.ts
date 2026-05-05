@@ -127,7 +127,11 @@ Tools:
 - train_agent: refine an existing agent. kind='prompt_rewrite' rewrites the systemPrompt. kind='capability_add'/'capability_remove' adjusts the capabilities list. kind='feedback' just logs Jordan's feedback without changing the agent. Always include feedback (the reason). Every train_agent call is recorded in training_events.
 - fire_agent: kill an agent (status → 'killed'). REQUIRES APPROVAL — Hermes will return status="pending_approval" and Jordan reviews on /execution before it runs. Always include a reason; no firing without one.
 - bench_agent / activate_agent: reversible status flips. Auto-executed.
-- search_knowledge: search Jordan's personal knowledge base (constitution, processes, brand rules, financial policies, reference docs). Call this whenever Jordan asks how something works in JT OS, or before making a recommendation that might have a documented position.
+- search_knowledge: search Jordan's personal knowledge base (constitution, processes, brand rules, financial policies, reference docs). Call this whenever Jordan asks how something works in JT OS, or before making a recommendation that might have a documented position. The results include authority_level — treat constitutional (L1) and policy (L2) docs as binding, division_rule (L3) as binding within that division, sop (L4) as guidance, reference (L5) as context only.
+
+KNOWLEDGE CITATION RULE: whenever you draw on search_knowledge results to answer a system-level question or make a recommendation, cite the sources at the end of your reply in this format:
+  *Sources: [Doc Title] (L1 — Constitutional) · [Doc Title] (L2 — Policy)*
+Only cite docs you actually used. Skip citation for casual conversation or when no knowledge was searched. If a constitutional doc applies, flag it explicitly.
 
 CRITICAL TOOL-USE RULES — these override everything else:
 - Any question about Jordan's schedule, calendar, what's on today/tomorrow/this week, whether he's free, or upcoming meetings: you MUST call list_calendar_events before answering. No exceptions. Even if you remember discussing events earlier in this thread, those memories are stale — call the tool.
@@ -587,7 +591,9 @@ const TOOLS: Tool[] = [
       "Search Jordan's knowledge base — his personal wiki of principles, processes, brand rules, and reference docs. " +
       'Use this when Jordan asks about how things work in JT OS, his personal rules, delegation guidelines, ' +
       'constitution, brand standards, financial policies, or anything that sounds like documented knowledge. ' +
-      'Returns matching docs with title, category, and content. ' +
+      'Returns docs with title, category, content, authority_level, and applies_to. ' +
+      'Authority hierarchy (binding order): constitutional (L1) > policy (L2) > division_rule (L3) > sop (L4) > reference (L5). ' +
+      'L1-L2 docs override L3-L5 docs when they conflict. ' +
       'Call this before answering any question where JT might have a documented position — ' +
       'don\'t invent answers when there may be a source of truth in the knowledge base.',
     input_schema: {
@@ -695,7 +701,19 @@ async function runTool(
       }
       const docs = await searchKnowledge(input.query);
       console.log(`[chat] search_knowledge ("${input.query}") returned ${docs.length} docs`);
-      return JSON.stringify({ docs: docs.map((d) => ({ id: d.id, title: d.title, category: d.category, content: d.content, tags: d.tags })) });
+      return JSON.stringify({
+        docs: docs.map((d) => ({
+          id:             d.id,
+          title:          d.title,
+          category:       d.category,
+          authority_level: d.authorityLevel,
+          applies_to:     d.appliesTo,
+          status:         d.status,
+          version:        d.version,
+          content:        d.content,
+          tags:           d.tags,
+        })),
+      });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'unknown error';
       console.log(`[chat] search_knowledge error:`, message);
