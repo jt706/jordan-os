@@ -20,7 +20,7 @@ import {
 
 const navItems = [
   { href: '/',              label: 'Dashboard',     icon: SquaresFour },
-  { href: '/chat',          label: 'CEO Agent',     icon: ChatCircleDots },
+  { href: '/chat',          label: 'Bellion',     icon: ChatCircleDots },
   { href: '/threads',       label: 'Threads',       icon: GitBranch },
   { href: '/decisions',     label: 'Decisions',     icon: Lightning },
   { href: '/agents',        label: 'Agents',        icon: Robot },
@@ -135,7 +135,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 4px' }}>
             <div className="pulse-online" />
             <div>
-              <div style={{ fontSize: 12, color: 'var(--text)', fontWeight: 500 }}>CEO Agent</div>
+              <div style={{ fontSize: 12, color: 'var(--text)', fontWeight: 500 }}>Bellion</div>
               <div style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 400 }}>Online</div>
             </div>
           </div>

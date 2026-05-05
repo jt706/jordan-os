@@ -35,7 +35,7 @@ export default function ThreadsView({ threads }: { threads: Thread[] }) {
           Threads
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: 14, margin: 0 }}>
-          All conversation history with CEO Agent
+          All conversation history with Bellion
         </p>
       </div>
 

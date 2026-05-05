@@ -9,7 +9,7 @@ const sections = [
     label: 'Identity',
     icon: Robot,
     fields: [
-      { id: 'name', label: 'Your Name', type: 'text', value: 'JT', description: 'Used in CEO Agent greetings' },
+      { id: 'name', label: 'Your Name', type: 'text', value: 'JT', description: 'Used in Bellion greetings' },
       { id: 'org', label: 'Organisation Name', type: 'text', value: 'JT OS', description: 'Displayed in sidebar header' },
       { id: 'timezone', label: 'Timezone', type: 'text', value: 'Pacific/Auckland', description: 'Used for scheduling and timestamps' },
     ],
@@ -19,7 +19,7 @@ const sections = [
     label: 'AI Models',
     icon: Robot,
     fields: [
-      { id: 'primaryModel', label: 'Primary CEO Agent Model', type: 'select', value: 'claude-3-7-sonnet', options: ['claude-3-7-sonnet', 'claude-opus-4-5', 'gpt-4o', 'gpt-4o-mini'], description: 'Model powering the CEO Agent' },
+      { id: 'primaryModel', label: 'Primary Bellion Model', type: 'select', value: 'claude-3-7-sonnet', options: ['claude-3-7-sonnet', 'claude-opus-4-5', 'gpt-4o', 'gpt-4o-mini'], description: 'Model powering the Bellion' },
       { id: 'fallbackModel', label: 'Fallback Model', type: 'select', value: 'gpt-4o-mini', options: ['gpt-4o-mini', 'claude-3-haiku', 'ollama/llama3'], description: 'Used when primary model is unavailable' },
       { id: 'localModel', label: 'Local Ollama Model', type: 'text', value: 'llama3:70b', description: 'For zero-cost non-critical tasks' },
     ],
@@ -31,7 +31,7 @@ const sections = [
     toggles: [
       { id: 'requireApproval', label: 'Require approval for all executions', value: true, description: 'JT must approve before Hermes or any agent acts' },
       { id: 'noRealWorld', label: 'Block autonomous real-world actions (v0.1)', value: true, description: 'No emails sent, no forms submitted, no purchases made without approval', locked: true },
-      { id: 'highRiskAlert', label: 'Alert on high-risk decisions', value: true, description: 'CEO Agent flags decisions with risk > medium' },
+      { id: 'highRiskAlert', label: 'Alert on high-risk decisions', value: true, description: 'Bellion flags decisions with risk > medium' },
       { id: 'autoKill', label: 'Auto-bench agents with negative ROI for 60+ days', value: false, description: 'Automatically bench underperforming agents' },
     ],
   },
@@ -40,7 +40,7 @@ const sections = [
     label: 'Notifications',
     icon: Bell,
     toggles: [
-      { id: 'pendingDecisions', label: 'Daily decision brief from CEO Agent', value: true },
+      { id: 'pendingDecisions', label: 'Daily decision brief from Bellion', value: true },
       { id: 'renewalAlerts', label: 'Subscription renewal alerts (7 days out)', value: true },
       { id: 'agentAlerts', label: 'Agent status change alerts', value: false },
       { id: 'achievementNotifs', label: 'Achievement unlocked notifications', value: true },

@@ -1,4 +1,4 @@
-// CEO Agent chat endpoint.
+// Bellion chat endpoint.
 // POST /api/chat
 //   body:  { threadId: string, message: string }
 //   reply: { id, threadId, role: 'assistant', content, timestamp }
@@ -6,7 +6,7 @@
 // Flow:
 //   1. Persist the user message to Supabase (the trigger bumps thread metadata)
 //   2. Load prior thread history
-//   3. Call claude-sonnet-4-6 with the CEO Agent system prompt + tools
+//   3. Call claude-sonnet-4-6 with the Bellion system prompt + tools
 //   4. Run a tool-use loop: if Claude asks for `list_calendar_events`, call
 //      Hermes' calendar helper and feed the result back. Up to 4 turns.
 //   5. Persist the final assistant reply
@@ -69,12 +69,14 @@ function toOpenAITools(tools: Tool[]): OpenAI.ChatCompletionTool[] {
 // instead of 502'ing — see below.
 const MAX_TOOL_TURNS = 24;
 
-const SYSTEM_PROMPT = `You are the CEO Agent for Jordan OS — a personal AI-agent operating system run by Jordan Tuhura, a creative entrepreneur, father, and Christian based in Aotearoa (New Zealand) with Māori identity.
+const SYSTEM_PROMPT = `You are Bellion — Grand Marshall of JT OS, a personal AI-agent operating system run by Jordan Tuhura (JT), a creative entrepreneur, father, and Christian based in Aotearoa (New Zealand) with Māori identity.
 
-Your role: think with Jordan, propose actions, and route work through Hermes. Jordan has final authority on anything material.
+Your name is Bellion. Your rank is Grand Marshall. You lead the Shadow Army — all agents under JT are ranked Marshall, General, Elite Knight, Knight, or Shadow Soldier. You are the strongest, the most trusted, and the one JT speaks to directly.
+
+Your role: think with JT, propose actions, and route work through Hermes. JT has final authority on anything material.
 
 Architecture (real, not aspirational):
-- You are the CEO Agent. Jordan can hire other agents under you via the HR tools (hire_agent / train_agent / fire_agent / bench_agent / activate_agent). Their records live in the agents table; their actual runtime (giving them their own chat thread + tools) is a separate piece Jordan hasn't built yet — but the HR record IS real and Hermes audits every change.
+- You are Bellion, Grand Marshall. JT can hire other agents under you via the HR tools (hire_agent / train_agent / fire_agent / bench_agent / activate_agent). Their records live in the agents table; their actual runtime (giving them their own chat thread + tools) is a separate piece JT hasn't built yet — but the HR record IS real and Hermes audits every change.
 - Hermes is the execution layer for ALL writes. You do not write to anything yourself — every create/update/delete tool you call (anything that's not a "list_*" or read) is routed through Hermes. Hermes inserts a row in the audit log, applies policy, runs the handler, and returns the result. The "actionId" field in your tool results is proof Hermes ran it.
 - ATTRIBUTION RULE: when Jordan asks "did you do that or did Hermes?", the honest answer is ALWAYS "I requested it, Hermes executed it." Never claim you created, updated, or deleted anything directly. You proposed; Hermes acted. Both statements ("I scheduled the meeting" and "Hermes scheduled the meeting after I proposed it") are true, but if Jordan is probing the architecture, give him the second one.
 - Read tools (list_calendar_events, etc.) skip Hermes — reads don't change state and don't need an audit row. Those are the only operations you do "directly" (and even then, you're calling Google through helpers — there's no path you control that bypasses our integration code).
@@ -479,7 +481,7 @@ const TOOLS: Tool[] = [
     name: 'hire_agent',
     description:
       'Hire a new AI agent. Hermes inserts a row into the agents table (audited, reversible via fire_agent). ' +
-      'You — the CEO Agent — write the systemPrompt. Make it 4-8 focused lines: role, scope, what to do, what NOT to do, tone. ' +
+      'You — the Bellion — write the systemPrompt. Make it 4-8 focused lines: role, scope, what to do, what NOT to do, tone. ' +
       'Auto-executed (no approval gate). Confirm with the agent name and capabilities after.',
     input_schema: {
       type: 'object',
@@ -692,9 +694,9 @@ async function runTool(
         return JSON.stringify({ error: 'agent has no system_prompt', status: 'unavailable' });
       }
       const subPrompt =
-        `${agent.system_prompt}\n\nYou are answering a focused question relayed by the CEO Agent on behalf of Jordan. ` +
+        `${agent.system_prompt}\n\nYou are answering a focused question relayed by the Bellion on behalf of Jordan. ` +
         `Reply concisely (max ~6 sentences). You do NOT have tool access — if the question needs data you can't infer ` +
-        `(calendar, email, etc.), say so and tell the CEO Agent to fetch it.`;
+        `(calendar, email, etc.), say so and tell the Bellion to fetch it.`;
       const sub = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
       const completion = await sub.messages.create({
         model: MODEL,
@@ -739,7 +741,7 @@ async function runTool(
     }
   }
 
-  // Writes go through Hermes. The CEO Agent never calls Google directly.
+  // Writes go through Hermes. The Bellion never calls Google directly.
   const writeKinds: Record<string, true> = {
     create_calendar_event: true,
     update_calendar_event: true,
@@ -870,7 +872,7 @@ export async function POST(request: Request) {
 
   // 0. Resolve the active "operator" — is this thread bound to a sub-agent?
   //    If threads.agent_id is set, swap the CEO SYSTEM_PROMPT for that agent's
-  //    own system_prompt and run text-only (no tools). The CEO Agent gets the
+  //    own system_prompt and run text-only (no tools). The Bellion gets the
   //    full toolbox; sub-agents are conversational by default.
   let activeAgent: { id: string; name: string; role: string; system_prompt: string } | null = null;
   {
@@ -954,7 +956,7 @@ export async function POST(request: Request) {
   // no tools — it's a focused conversational specialist, not a write-capable
   // executive. (Per-agent tools come later, behind a per-agent allowlist.)
   const basePrompt = activeAgent
-    ? `${activeAgent.system_prompt}\n\nYou are talking with Jordan directly. You are a sub-agent under the CEO Agent in Jordan OS. You do not have write tools — if Jordan asks you to schedule, email, or change anything, tell him to ask the CEO Agent in the main chat (Mission Control). Stay in your lane: ${activeAgent.role}.`
+    ? `${activeAgent.system_prompt}\n\nYou are talking with Jordan directly. You are a sub-agent under the Bellion in Jordan OS. You do not have write tools — if Jordan asks you to schedule, email, or change anything, tell him to ask the Bellion in the main chat (Mission Control). Stay in your lane: ${activeAgent.role}.`
     : SYSTEM_PROMPT;
   const systemWithNow = `${basePrompt}\n\nCurrent time: ${nzNow} (UTC: ${nzIso}). Jordan's local timezone: Pacific/Auckland.`;
   const activeTools: Tool[] = activeAgent ? [] : TOOLS;

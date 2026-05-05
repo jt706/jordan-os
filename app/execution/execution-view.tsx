@@ -120,7 +120,7 @@ export default function ExecutionView({ actions }: { actions: ActionRow[] }) {
         <SectionHeader label={`Recent (${recent.length})`} />
         {recent.length === 0 ? (
           <div className="card" style={{ padding: 20, textAlign: 'center', color: 'var(--text-dim)', fontSize: 13 }}>
-            No actions yet. Ask the CEO Agent to schedule something and it&apos;ll show up here.
+            No actions yet. Ask the Bellion to schedule something and it&apos;ll show up here.
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

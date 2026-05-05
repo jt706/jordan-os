@@ -76,7 +76,7 @@ function MessageBubble({ msg, agentName, agentAvatar }: { msg: Message; agentNam
           )}
         </div>
         <div style={{ fontSize: 11, color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
-          {isUser ? 'Jordan' : (agentName ?? 'CEO Agent')} · {formatTime(new Date(msg.timestamp))}
+          {isUser ? 'Jordan' : (agentName ?? 'Bellion')} · {formatTime(new Date(msg.timestamp))}
         </div>
       </div>
     </div>
@@ -167,7 +167,7 @@ function ChatPageInner() {
         if (!activeId) {
           const { data: created, error: cErr } = await supabase
             .from('threads')
-            .insert({ title: 'CEO Agent — Mission Control', tags: ['CEO'], pinned: true })
+            .insert({ title: 'Bellion — Mission Control', tags: ['CEO'], pinned: true })
             .select('id')
             .single();
           if (cErr) throw cErr;
@@ -326,7 +326,7 @@ function ChatPageInner() {
         </div>
         <div>
           <div style={{ fontWeight: 700, fontSize: 15 }}>
-            {activeAgent ? activeAgent.name : 'CEO Agent'}
+            {activeAgent ? activeAgent.name : 'Bellion'}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text-muted)' }}>
             <div className="pulse-online" />
@@ -522,7 +522,7 @@ function ChatPageInner() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={`Message ${activeAgent?.name ?? 'CEO Agent'}… (Enter to send, Shift+Enter for new line)`}
+            placeholder={`Message ${activeAgent?.name ?? 'Bellion'}… (Enter to send, Shift+Enter for new line)`}
             rows={2}
             style={{
               background: 'transparent',
@@ -629,7 +629,7 @@ function ChatPageInner() {
             fontFamily: 'var(--font-mono)',
           }}
         >
-          Jordan has final authority · CEO Agent coordinates all agents
+          Jordan has final authority · Bellion coordinates all agents
         </div>
       </div>
     </div>

@@ -171,7 +171,7 @@ function DecisionCard({
         />
         <div style={{ flex: 1, minWidth: 180 }}>
           <div style={{ fontSize: 10, color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', marginBottom: 4 }}>
-            CEO Agent Recommendation
+            Bellion Recommendation
           </div>
           <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5 }}>{d.recommendation}</div>
         </div>

@@ -98,7 +98,7 @@ export default async function Dashboard() {
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: 14, marginTop: 6, marginBottom: 0 }}>
           <span style={{ color: 'var(--accent)', marginRight: 6 }}>●</span>
-          CEO online · {activeAgents} agent{activeAgents === 1 ? '' : 's'} active · {pendingDecisions.length} decision{pendingDecisions.length === 1 ? '' : 's'} pending
+          Bellion online · {activeAgents} agent{activeAgents === 1 ? '' : 's'} active · {pendingDecisions.length} decision{pendingDecisions.length === 1 ? '' : 's'} pending
         </p>
       </div>
 
@@ -120,7 +120,7 @@ export default async function Dashboard() {
         <div style={{ flex: 1, minWidth: 200 }}>
           <div style={{ fontWeight: 600, fontSize: 14, color: 'var(--text)', marginBottom: 2 }}>
             <Brain size={16} weight="fill" style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
-            CEO Agent Summary
+            Bellion Summary
           </div>
           <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>
             {bannerBits.join(' · ')}
@@ -316,7 +316,7 @@ export default async function Dashboard() {
         <div style={{ padding: '4px 0' }}>
           {recentActions.length === 0 && (
             <div style={{ padding: '14px 16px', fontSize: 12, color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
-              No actions yet. Ask the CEO Agent to do something.
+              No actions yet. Ask the Bellion to do something.
             </div>
           )}
           {recentActions.map((a, i) => (
