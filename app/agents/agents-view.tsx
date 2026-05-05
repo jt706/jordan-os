@@ -36,9 +36,24 @@ const statusConfig: Record<AgentStatus, { label: string; color: string; dotClass
 
 const DIVISIONS: AgentDivision[] = ['Strategy', 'Research', 'Execution', 'Finance', 'Marketing', 'Operations', 'Development'];
 
+// Classify agent role into hierarchy tier
+function getTier(role: string): 'lead' | 'senior' | 'agent' {
+  const r = role.toLowerCase();
+  if (/head of|general manager|chief of staff|director|ceo|foreman|owner|vp /.test(r)) return 'lead';
+  if (/manager|strategist|architect|lead |senior|coordinator/.test(r)) return 'senior';
+  return 'agent';
+}
+
+const tierConfig = {
+  lead:   { label: 'Leadership',    color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
+  senior: { label: 'Senior',        color: '#5bbcff',  bg: 'rgba(91,188,255,0.08)' },
+  agent:  { label: 'Specialists',   color: '#a855f7',  bg: 'rgba(168,85,247,0.06)' },
+};
+
 export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }) {
   const router = useRouter();
   const [agents, setAgents] = useState<Agent[]>(initialAgents);
+  const [view, setView] = useState<'org' | 'list'>('org');
   const [sortBy, setSortBy] = useState<'roi' | 'value' | 'cost'>('roi');
   const [showHire, setShowHire] = useState(false);
   const [pendingFire, setPendingFire] = useState<Set<string>>(new Set());
@@ -136,14 +151,30 @@ export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }
             Hire, train, bench, or fire your AI agents. Every change is audited by Hermes.
           </p>
         </div>
-        <button
-          onClick={() => setShowHire((s) => !s)}
-          className="btn btn-cyan"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '6px 12px' }}
-        >
-          {showHire ? <X size={14} /> : <UserPlus size={14} />}
-          {showHire ? 'Cancel' : 'Hire agent'}
-        </button>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {/* View toggle */}
+          <div style={{ display: 'flex', background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: 8, padding: 3, gap: 2 }}>
+            {(['org', 'list'] as const).map((v) => (
+              <button key={v} onClick={() => setView(v)} style={{
+                padding: '4px 12px', borderRadius: 5, border: 'none', cursor: 'pointer', fontSize: 11,
+                fontFamily: 'var(--font-mono)', fontWeight: 600, transition: 'all 0.15s',
+                background: view === v ? 'var(--bg-surface)' : 'transparent',
+                color: view === v ? 'var(--accent)' : 'var(--text-muted)',
+                boxShadow: view === v ? '0 1px 4px rgba(0,0,0,0.3)' : 'none',
+              }}>
+                {v === 'org' ? 'ORG' : 'LIST'}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => setShowHire((s) => !s)}
+            className="btn btn-cyan"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '6px 12px' }}
+          >
+            {showHire ? <X size={14} /> : <UserPlus size={14} />}
+            {showHire ? 'Cancel' : 'Hire agent'}
+          </button>
+        </div>
       </div>
 
       {showHire && (
@@ -170,6 +201,118 @@ export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }
           </div>
         ))}
       </div>
+
+      {/* ── ORG VIEW ── */}
+      {view === 'org' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, opacity: isPending ? 0.6 : 1 }}>
+          {DIVISIONS.map((divName) => {
+            const divAgents = agents.filter((a) => a.division === divName);
+            if (divAgents.length === 0) return null;
+            const cfg = divisionConfig[divName];
+            const DivIcon = cfg.icon;
+            const leads   = divAgents.filter((a) => getTier(a.role) === 'lead');
+            const seniors = divAgents.filter((a) => getTier(a.role) === 'senior');
+            const agts    = divAgents.filter((a) => getTier(a.role) === 'agent');
+            return (
+              <div key={divName} className="card animate-fade-up" style={{ overflow: 'hidden' }}>
+                {/* Division header */}
+                <div style={{
+                  padding: '14px 18px',
+                  background: cfg.bg,
+                  borderBottom: `1px solid color-mix(in srgb, ${cfg.color} 20%, transparent)`,
+                  display: 'flex', alignItems: 'center', gap: 12,
+                }}>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                    background: `color-mix(in srgb, ${cfg.color} 15%, transparent)`,
+                    border: `1px solid color-mix(in srgb, ${cfg.color} 30%, transparent)`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <DivIcon size={18} weight="fill" color={cfg.color} />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text)', letterSpacing: '-0.02em' }}>{divName}</div>
+                    <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: cfg.color, marginTop: 1 }}>
+                      {divAgents.length} agent{divAgents.length !== 1 ? 's' : ''} · {divAgents.filter(a => a.status === 'active').length} active
+                    </div>
+                  </div>
+                  <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
+                    {(['lead', 'senior', 'agent'] as const).map((tier) => {
+                      const count = divAgents.filter(a => getTier(a.role) === tier).length;
+                      if (count === 0) return null;
+                      const tc = tierConfig[tier];
+                      return (
+                        <span key={tier} style={{
+                          fontSize: 10, fontFamily: 'var(--font-mono)', fontWeight: 600,
+                          background: tc.bg, color: tc.color, padding: '2px 8px',
+                          borderRadius: 6, border: `1px solid color-mix(in srgb, ${tc.color} 20%, transparent)`,
+                        }}>
+                          {count} {tc.label}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Tiers */}
+                {([['lead', leads], ['senior', seniors], ['agent', agts]] as const).map(([tier, list]) => {
+                  if (list.length === 0) return null;
+                  const tc = tierConfig[tier];
+                  return (
+                    <div key={tier} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                      <div style={{
+                        padding: '6px 18px', fontSize: 9, fontFamily: 'var(--font-mono)',
+                        color: tc.color, letterSpacing: '0.1em', textTransform: 'uppercase',
+                        background: `color-mix(in srgb, ${tc.color} 4%, transparent)`,
+                        borderBottom: `1px solid color-mix(in srgb, ${tc.color} 10%, transparent)`,
+                      }}>
+                        {tc.label}
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
+                        {list.map((agent, idx) => {
+                          const sc = statusConfig[agent.status];
+                          return (
+                            <div key={agent.id} style={{
+                              padding: '10px 18px',
+                              display: 'flex', alignItems: 'center', gap: 10,
+                              borderRight: idx % 2 === 0 ? '1px solid var(--border-subtle)' : 'none',
+                              borderBottom: '1px solid var(--border-subtle)',
+                            }}>
+                              <div style={{
+                                width: 30, height: 30, borderRadius: 8, flexShrink: 0,
+                                background: cfg.bg,
+                                border: `1px solid color-mix(in srgb, ${cfg.color} 25%, transparent)`,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              }}>
+                                <DivIcon size={13} weight="fill" color={cfg.color} />
+                              </div>
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {agent.name}
+                                </div>
+                                <div style={{ fontSize: 10, color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {agent.role.length > 40 ? agent.role.slice(0, 40) + '…' : agent.role}
+                                </div>
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+                                <div className={sc.dotClass} style={{ width: 6, height: 6 }} />
+                                <span style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: sc.color }}>{agent.status}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ── LIST VIEW ── */}
+      {view === 'list' && <>
 
       {/* Leaderboard */}
       <div className="card animate-fade-up delay-2" style={{ marginBottom: 20 }}>
@@ -275,6 +418,7 @@ export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }
           />
         ))}
       </div>
+      </>}
     </div>
   );
 }
@@ -614,6 +758,8 @@ function AgentCard({
   onLogValue: () => void;
 }) {
   const sc = statusConfig[agent.status];
+  const div = divisionConfig[agent.division] ?? divisionConfig['Operations'];
+  const DivIcon = div.icon;
   const [showHistory, setShowHistory] = useState(false);
   const isLive = agent.status !== 'killed';
   return (
@@ -622,21 +768,13 @@ function AgentCard({
       style={{ padding: '16px', opacity: agent.status === 'killed' ? 0.5 : 1 }}
     >
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 12 }}>
-        <div
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: 10,
-            background: 'var(--bg-elevated)',
-            border: '1px solid var(--border)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 24,
-            flexShrink: 0,
-          }}
-        >
-          {agent.avatar}
+        <div style={{
+          width: 44, height: 44, borderRadius: 10, flexShrink: 0,
+          background: div.bg,
+          border: `1px solid color-mix(in srgb, ${div.color} 30%, transparent)`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <DivIcon size={20} weight="fill" color={div.color} />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
