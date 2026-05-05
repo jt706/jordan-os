@@ -37,18 +37,40 @@ const statusConfig: Record<AgentStatus, { label: string; color: string; dotClass
 
 const DIVISIONS: AgentDivision[] = ['Agent HR', 'Tuatahi', 'Noa', 'Sidekick AI', 'Personal', 'Shared Services', 'Marketing & Sales', 'Venture Studio'];
 
-// Classify agent role into hierarchy tier
-function getTier(role: string): 'lead' | 'senior' | 'agent' {
+// ─── Shadow Army Rank System (Solo Leveling) ────────────────────────────────
+// Grand Marshall → Marshall → General → Elite Knight → Knight → Shadow Soldier
+// Rank is inferred from the agent's role title, not stored in DB.
+
+export type ShadowRank =
+  | 'grand-marshall'
+  | 'marshall'
+  | 'general'
+  | 'elite-knight'
+  | 'knight'
+  | 'shadow-soldier';
+
+function getRank(role: string): ShadowRank {
   const r = role.toLowerCase();
-  if (/head of|general manager|chief of staff|director|ceo|foreman|owner|vp /.test(r)) return 'lead';
-  if (/manager|strategist|architect|lead |senior|coordinator/.test(r)) return 'senior';
-  return 'agent';
+  if (/\bceo\b/.test(r))                                                     return 'grand-marshall';
+  if (/general manager|chief of staff/.test(r))                              return 'marshall';
+  if (/head of|director|vp |foreman|\bowner\b/.test(r))                      return 'general';
+  if (/\bsenior\b|lead |architect|principal/.test(r))                        return 'elite-knight';
+  if (/\bmanager\b|coordinator|strategist/.test(r))                          return 'knight';
+  return 'shadow-soldier';
 }
 
-const tierConfig = {
-  lead:   { label: 'Leadership',    color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
-  senior: { label: 'Senior',        color: '#5bbcff',  bg: 'rgba(91,188,255,0.08)' },
-  agent:  { label: 'Specialists',   color: '#a855f7',  bg: 'rgba(168,85,247,0.06)' },
+// Rank order for sorting within a division (highest first)
+const RANK_ORDER: ShadowRank[] = [
+  'grand-marshall', 'marshall', 'general', 'elite-knight', 'knight', 'shadow-soldier',
+];
+
+const rankConfig: Record<ShadowRank, { label: string; short: string; color: string; bg: string }> = {
+  'grand-marshall': { label: 'Grand Marshall', short: 'Grand Marshall', color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
+  'marshall':       { label: 'Marshall',       short: 'Marshall',       color: '#f59e0b',  bg: 'rgba(245,158,11,0.08)' },
+  'general':        { label: 'General',        short: 'General',        color: '#a855f7',  bg: 'rgba(168,85,247,0.08)' },
+  'elite-knight':   { label: 'Elite Knight',   short: 'Elite Knight',   color: '#5bbcff',  bg: 'rgba(91,188,255,0.08)' },
+  'knight':         { label: 'Knight',         short: 'Knight',         color: '#9ca3af',  bg: 'rgba(156,163,175,0.07)' },
+  'shadow-soldier': { label: 'Shadow Soldier', short: 'Shadow',         color: '#6b7280',  bg: 'rgba(107,114,128,0.06)' },
 };
 
 export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }) {
@@ -211,9 +233,15 @@ export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }
             if (divAgents.length === 0) return null;
             const cfg = divisionConfig[divName];
             const DivIcon = cfg.icon;
-            const leads   = divAgents.filter((a) => getTier(a.role) === 'lead');
-            const seniors = divAgents.filter((a) => getTier(a.role) === 'senior');
-            const agts    = divAgents.filter((a) => getTier(a.role) === 'agent');
+            // Group agents by rank, sorted highest → lowest
+            const byRank = RANK_ORDER.map((rank) => ({
+              rank,
+              list: divAgents.filter((a) => getRank(a.role) === rank),
+            })).filter(({ list }) => list.length > 0);
+
+            // Summary pills: show only ranks that are present, highest ranks first
+            const topRanks = byRank.slice(0, 3);
+
             return (
               <div key={divName} className="card animate-fade-up" style={{ overflow: 'hidden' }}>
                 {/* Division header */}
@@ -237,37 +265,34 @@ export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }
                       {divAgents.length} agent{divAgents.length !== 1 ? 's' : ''} · {divAgents.filter(a => a.status === 'active').length} active
                     </div>
                   </div>
-                  <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
-                    {(['lead', 'senior', 'agent'] as const).map((tier) => {
-                      const count = divAgents.filter(a => getTier(a.role) === tier).length;
-                      if (count === 0) return null;
-                      const tc = tierConfig[tier];
+                  <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                    {topRanks.map(({ rank, list }) => {
+                      const rc = rankConfig[rank];
                       return (
-                        <span key={tier} style={{
+                        <span key={rank} style={{
                           fontSize: 10, fontFamily: 'var(--font-mono)', fontWeight: 600,
-                          background: tc.bg, color: tc.color, padding: '2px 8px',
-                          borderRadius: 6, border: `1px solid color-mix(in srgb, ${tc.color} 20%, transparent)`,
+                          background: rc.bg, color: rc.color, padding: '2px 8px',
+                          borderRadius: 6, border: `1px solid color-mix(in srgb, ${rc.color} 20%, transparent)`,
                         }}>
-                          {count} {tc.label}
+                          {list.length} {rc.short}
                         </span>
                       );
                     })}
                   </div>
                 </div>
 
-                {/* Tiers */}
-                {([['lead', leads], ['senior', seniors], ['agent', agts]] as const).map(([tier, list]) => {
-                  if (list.length === 0) return null;
-                  const tc = tierConfig[tier];
+                {/* Rank sections */}
+                {byRank.map(({ rank, list }) => {
+                  const rc = rankConfig[rank];
                   return (
-                    <div key={tier} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                    <div key={rank} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
                       <div style={{
                         padding: '6px 18px', fontSize: 9, fontFamily: 'var(--font-mono)',
-                        color: tc.color, letterSpacing: '0.1em', textTransform: 'uppercase',
-                        background: `color-mix(in srgb, ${tc.color} 4%, transparent)`,
-                        borderBottom: `1px solid color-mix(in srgb, ${tc.color} 10%, transparent)`,
+                        color: rc.color, letterSpacing: '0.1em', textTransform: 'uppercase',
+                        background: `color-mix(in srgb, ${rc.color} 4%, transparent)`,
+                        borderBottom: `1px solid color-mix(in srgb, ${rc.color} 10%, transparent)`,
                       }}>
-                        {tc.label}
+                        {rc.label}
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
                         {list.map((agent, idx) => {
@@ -292,7 +317,8 @@ export default function AgentsView({ initialAgents }: { initialAgents: Agent[] }
                                   {agent.name}
                                 </div>
                                 <div style={{ fontSize: 10, color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                  {agent.role.length > 40 ? agent.role.slice(0, 40) + '…' : agent.role}
+                                  <span style={{ color: rc.color, fontFamily: 'var(--font-mono)', marginRight: 4 }}>{rc.short}</span>
+                                  {agent.role.length > 36 ? agent.role.slice(0, 36) + '…' : agent.role}
                                 </div>
                               </div>
                               <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
@@ -782,7 +808,18 @@ function AgentCard({
             <span style={{ fontWeight: 700, fontSize: 14 }}>{agent.name}</span>
             <div className={sc.dotClass} />
           </div>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 2 }}>{agent.role}</div>
+          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}>
+            {(() => {
+              const rank = getRank(agent.role);
+              const rc = rankConfig[rank];
+              return (
+                <span>
+                  <span style={{ color: rc.color, fontFamily: 'var(--font-mono)', fontSize: 10, marginRight: 5 }}>{rc.short}</span>
+                  {agent.role}
+                </span>
+              );
+            })()}
+          </div>
           <span className="badge" style={{ background: 'var(--bg-elevated)', color: 'var(--text-dim)', border: '1px solid var(--border)', fontSize: 10 }}>
             {agent.division}
           </span>

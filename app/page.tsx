@@ -94,7 +94,7 @@ export default async function Dashboard() {
       {/* Header */}
       <div className="animate-fade-up" style={{ marginBottom: 28 }}>
         <h1 style={{ fontSize: 30, fontWeight: 700, margin: 0, letterSpacing: '-0.03em' }}>
-          <span className="gradient-text">Good morning, JT</span>
+          <span className="gradient-text">Kia ora JT</span>
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: 14, marginTop: 6, marginBottom: 0 }}>
           <span style={{ color: 'var(--accent)', marginRight: 6 }}>●</span>
