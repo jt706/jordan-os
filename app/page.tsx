@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { listAgents, listDecisions, listIdeas } from '@/lib/data/queries';
 import { listActions } from '@/lib/hermes';
-import { ArrowRight, Lightning, Robot, Terminal, ChatCircleDots, CheckCircle, XCircle, ArrowClockwise, Clock } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRight, Lightning, Robot, Terminal, ChatCircleDots, CheckCircle, XCircle, ArrowClockwise, Clock, Brain, Handshake, SealCheck, Lightbulb } from '@phosphor-icons/react/dist/ssr';
+import type { Icon } from '@phosphor-icons/react';
 
 // Dashboard is server-rendered. Every number on this page comes from the
 // database — no mocks. If a table is empty, the card shows zero. That's the
@@ -110,7 +111,8 @@ export default async function Dashboard() {
       >
         <div style={{ flex: 1, minWidth: 200 }}>
           <div style={{ fontWeight: 600, fontSize: 14, color: 'var(--text)', marginBottom: 2 }}>
-            🧠 CEO Agent Summary
+            <Brain size={16} weight="fill" style={{ display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
+            CEO Agent Summary
           </div>
           <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>
             {bannerBits.join(' · ')}
@@ -132,14 +134,16 @@ export default async function Dashboard() {
         }}
       >
         <StatCard
-          icon="🤖"
+          icon={Robot}
+          iconColor="var(--accent)"
           value={activeAgents}
           label="Active Agents"
           sub={`${agents.length} total`}
           delay={2}
         />
         <StatCard
-          icon="⚡"
+          icon={Lightning}
+          iconColor="var(--yellow)"
           value={pendingDecisions.length}
           label="Pending Decisions"
           sub={`${decisions.length} total`}
@@ -147,7 +151,8 @@ export default async function Dashboard() {
           delay={3}
         />
         <StatCard
-          icon="🛂"
+          icon={Handshake}
+          iconColor="var(--red)"
           value={pendingApprovals}
           label="Hermes Approvals"
           sub={pendingApprovals > 0 ? 'Awaiting your call' : 'None waiting'}
@@ -155,7 +160,8 @@ export default async function Dashboard() {
           delay={4}
         />
         <StatCard
-          icon="✅"
+          icon={SealCheck}
+          iconColor="var(--green)"
           value={actionsThisWeek}
           label="Actions This Week"
           sub="Hermes completed runs"
@@ -163,7 +169,8 @@ export default async function Dashboard() {
           delay={5}
         />
         <StatCard
-          icon="💡"
+          icon={Lightbulb}
+          iconColor="var(--accent2-bright)"
           value={ideas.length}
           label="Ideas Tracked"
           sub={`${validatedIdeas} validated`}
@@ -341,14 +348,16 @@ export default async function Dashboard() {
 
 // Small inline component to keep the stats grid readable.
 function StatCard({
-  icon,
+  icon: IconComponent,
+  iconColor = 'var(--accent)',
   value,
   label,
   sub,
   tone = 'neutral',
   delay,
 }: {
-  icon: string;
+  icon: Icon;
+  iconColor?: string;
   value: number | string;
   label: string;
   sub: string;
@@ -361,7 +370,14 @@ function StatCard({
     'var(--text-dim)';
   return (
     <div className={`card animate-fade-up delay-${Math.min(delay, 8)}`} style={{ padding: '18px' }}>
-      <div style={{ fontSize: 26, marginBottom: 10, lineHeight: 1 }}>{icon}</div>
+      <div style={{
+        width: 36, height: 36, borderRadius: 10, marginBottom: 12,
+        background: `color-mix(in srgb, ${iconColor} 12%, transparent)`,
+        border: `1px solid color-mix(in srgb, ${iconColor} 25%, transparent)`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <IconComponent size={18} weight="fill" color={iconColor} />
+      </div>
       <div
         className="mono"
         style={{ fontSize: 28, fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.03em', marginBottom: 3, lineHeight: 1 }}
