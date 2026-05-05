@@ -132,13 +132,26 @@ export default function Shell({ children }: { children: React.ReactNode }) {
 
         {/* ── Bottom status ── */}
         <div style={{ padding: '12px 12px 8px', borderTop: '1px solid var(--border)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 4px' }}>
-            <div className="pulse-online" />
+          <Link href="/chat" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 4px', textDecoration: 'none', borderRadius: 8, transition: 'background 0.15s' }}>
+            <div style={{
+              width: 28, height: 28, borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
+              border: '1px solid rgba(124,58,237,0.5)',
+              boxShadow: '0 0 10px rgba(124,58,237,0.35)',
+              position: 'relative',
+            }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/bellion.png" alt="Bellion" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{
+                position: 'absolute', bottom: 0, right: 0,
+                width: 8, height: 8, borderRadius: '50%',
+                background: 'var(--accent)', border: '1.5px solid var(--bg-surface)',
+              }} />
+            </div>
             <div>
               <div style={{ fontSize: 12, color: 'var(--text)', fontWeight: 500 }}>Bellion</div>
-              <div style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 400 }}>Online</div>
+              <div style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 400 }}>Grand Marshall</div>
             </div>
-          </div>
+          </Link>
         </div>
       </aside>
 

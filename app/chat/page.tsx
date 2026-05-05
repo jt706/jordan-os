@@ -36,16 +36,16 @@ function MessageBubble({ msg, agentName, agentAvatar }: { msg: Message; agentNam
             width: 32,
             height: 32,
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, rgba(0,200,255,0.2), rgba(168,85,247,0.2))',
-            border: '1px solid rgba(0,200,255,0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 16,
+            overflow: 'hidden',
+            border: '1px solid rgba(124,58,237,0.4)',
+            boxShadow: '0 0 12px rgba(124,58,237,0.3)',
             flexShrink: 0,
           }}
         >
-          {agentAvatar ?? <Brain size={16} weight="fill" color="var(--accent)" />}
+          {agentAvatar
+            ? <img src={agentAvatar} alt="agent" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            : <img src="/bellion.png" alt="Bellion" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          }
         </div>
       )}
 
