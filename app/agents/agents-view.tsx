@@ -29,10 +29,28 @@ const divisionConfig: Record<string, { icon: Icon; color: string; bg: string }> 
 };
 
 const statusConfig: Record<AgentStatus, { label: string; color: string; dotClass: string }> = {
-  active:  { label: 'Active',  color: 'var(--green)',    dotClass: 'pulse-online' },
-  idle:    { label: 'Idle',    color: 'var(--yellow)',   dotClass: 'pulse-degraded' },
-  benched: { label: 'Benched', color: 'var(--red)',      dotClass: 'pulse-offline' },
-  killed:  { label: 'Killed',  color: 'var(--text-dim)', dotClass: 'pulse-offline' },
+  active:      { label: 'Active',      color: 'var(--green)',         dotClass: 'pulse-online' },
+  idle:        { label: 'Idle',        color: 'var(--yellow)',        dotClass: 'pulse-degraded' },
+  benched:     { label: 'Benched',     color: 'var(--red)',           dotClass: 'pulse-offline' },
+  killed:      { label: 'Killed',      color: 'var(--text-dim)',      dotClass: 'pulse-offline' },
+  quarantined: { label: 'Quarantined', color: 'rgba(255,68,102,0.9)', dotClass: 'pulse-pending' },
+};
+
+const riskConfig: Record<string, { label: string; color: string; bg: string }> = {
+  green:  { label: 'Healthy',     color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
+  yellow: { label: 'Watchlist',   color: '#ffaa00',  bg: 'rgba(255,170,0,0.08)' },
+  orange: { label: 'Restricted',  color: '#fb923c',  bg: 'rgba(251,146,60,0.08)' },
+  red:    { label: 'Quarantined', color: '#ff4466',  bg: 'rgba(255,68,102,0.08)' },
+  black:  { label: 'Fired',       color: '#6b7280',  bg: 'rgba(107,114,128,0.06)' },
+};
+
+const permissionLabel: Record<number, string> = {
+  0: 'Dormant',
+  1: 'Read-only',
+  2: 'Draft',
+  3: 'Tool-assisted',
+  4: 'Execution',
+  5: 'Core',
 };
 
 const DIVISIONS: AgentDivision[] = ['Agent HR', 'Tuatahi', 'Noa', 'Sidekick AI', 'Personal', 'Shared Services', 'Marketing & Sales', 'Venture Studio'];
@@ -793,12 +811,20 @@ function AgentCard({
   const sc = statusConfig[agent.status];
   const div = divisionConfig[agent.division] ?? divisionConfig['Shared Services'];
   const DivIcon = div.icon;
+  const rc = riskConfig[agent.riskStatus ?? 'green'];
+  const permLabel = permissionLabel[agent.permissionLevel ?? 2];
   const [showHistory, setShowHistory] = useState(false);
-  const isLive = agent.status !== 'killed';
+  const isLive = agent.status !== 'killed' && agent.status !== 'quarantined';
+  const isQuarantined = agent.status === 'quarantined';
   return (
     <div
       className={`card animate-fade-up delay-${Math.min(index + 3, 8)}`}
-      style={{ padding: '16px', opacity: agent.status === 'killed' ? 0.5 : 1 }}
+      style={{
+        padding: '16px',
+        opacity: agent.status === 'killed' ? 0.5 : 1,
+        borderColor: isQuarantined ? 'rgba(255,68,102,0.4)' : undefined,
+        boxShadow: isQuarantined ? '0 0 16px rgba(255,68,102,0.15)' : undefined,
+      }}
     >
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 12 }}>
         <div style={{
@@ -829,9 +855,17 @@ function AgentCard({
               );
             })()}
           </div>
-          <span className="badge" style={{ background: 'var(--bg-elevated)', color: 'var(--text-dim)', border: '1px solid var(--border)', fontSize: 10 }}>
-            {agent.division}
-          </span>
+          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+            <span className="badge" style={{ background: 'var(--bg-elevated)', color: 'var(--text-dim)', border: '1px solid var(--border)', fontSize: 10 }}>
+              {agent.division}
+            </span>
+            <span className="badge" style={{ background: rc.bg, color: rc.color, border: `1px solid color-mix(in srgb, ${rc.color} 25%, transparent)`, fontSize: 10 }}>
+              {rc.label}
+            </span>
+            <span className="badge" style={{ background: 'var(--bg-elevated)', color: 'var(--text-dim)', border: '1px solid var(--border)', fontSize: 10 }}>
+              L{agent.permissionLevel ?? 2} · {permLabel}
+            </span>
+          </div>
         </div>
       </div>
 

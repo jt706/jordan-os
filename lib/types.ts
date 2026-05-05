@@ -1,6 +1,9 @@
 // ─── Core Enums ─────────────────────────────────────────────────────────────
 
-export type AgentStatus = 'active' | 'idle' | 'benched' | 'killed';
+export type AgentStatus = 'active' | 'idle' | 'benched' | 'killed' | 'quarantined';
+
+export type RiskStatus = 'green' | 'yellow' | 'orange' | 'red' | 'black';
+export type PermissionLevel = 0 | 1 | 2 | 3 | 4 | 5;
 export type AgentDivision =
   | 'Agent HR'
   | 'Tuatahi'
@@ -86,6 +89,8 @@ export interface Agent {
   capabilities: string[];
   lastActive: Date;
   avatar: string; // emoji
+  permissionLevel: PermissionLevel; // 0–5
+  riskStatus: RiskStatus;           // green → black
 }
 
 // ─── Subscriptions ───────────────────────────────────────────────────────────

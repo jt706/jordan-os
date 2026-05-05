@@ -206,6 +206,8 @@ interface AgentRow {
   capabilities: string[] | null;
   avatar: string;
   last_active: string;
+  permission_level: number | null;
+  risk_status: string | null;
 }
 
 function rowToAgent(r: AgentRow): Agent {
@@ -222,6 +224,8 @@ function rowToAgent(r: AgentRow): Agent {
     capabilities: r.capabilities ?? [],
     lastActive: new Date(r.last_active),
     avatar: r.avatar,
+    permissionLevel: (r.permission_level ?? 2) as Agent['permissionLevel'],
+    riskStatus: (r.risk_status ?? 'green') as Agent['riskStatus'],
   };
 }
 
