@@ -3,8 +3,7 @@
 import { useState, useRef, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Message } from '@/lib/types';
-import { Send, Paperclip, Camera, Mic } from 'lucide-react';
-import { Brain, Robot } from '@phosphor-icons/react';
+import { Brain, Robot, PaperPlaneTilt, Paperclip, Camera, Microphone, Warning, X as PhosphorX } from '@phosphor-icons/react';
 import { createClient } from '@/lib/supabase/client';
 
 interface ActiveAgent {
@@ -380,7 +379,7 @@ function ChatPageInner() {
             flexShrink: 0,
           }}
         >
-          <span>⚠ {error}</span>
+          <Warning size={14} weight="fill" style={{ flexShrink: 0 }} /><span>{error}</span>
           <button
             onClick={() => setError(null)}
             style={{
@@ -391,7 +390,7 @@ function ChatPageInner() {
               fontSize: 14,
             }}
           >
-            ✕
+            <PhosphorX size={14} />
           </button>
         </div>
       )}
@@ -591,7 +590,7 @@ function ChatPageInner() {
                   opacity: 0.5,
                 }}
               >
-                <Mic size={16} />
+                <Microphone size={16} />
               </button>
             </div>
 
@@ -615,7 +614,7 @@ function ChatPageInner() {
                 fontFamily: 'var(--font-body)',
               }}
             >
-              <Send size={13} />
+              <PaperPlaneTilt size={13} weight="fill" />
               Send
             </button>
           </div>

@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Save, Shield, Bot, Bell, Palette, Database } from 'lucide-react';
+import { FloppyDisk, ShieldCheck, Robot, Bell, Palette, Database, Check } from '@phosphor-icons/react';
 
 const sections = [
   {
     id: 'identity',
     label: 'Identity',
-    icon: Bot,
+    icon: Robot,
     fields: [
       { id: 'name', label: 'Your Name', type: 'text', value: 'JT', description: 'Used in CEO Agent greetings' },
       { id: 'org', label: 'Organisation Name', type: 'text', value: 'JT OS', description: 'Displayed in sidebar header' },
@@ -17,7 +17,7 @@ const sections = [
   {
     id: 'ai',
     label: 'AI Models',
-    icon: Bot,
+    icon: Robot,
     fields: [
       { id: 'primaryModel', label: 'Primary CEO Agent Model', type: 'select', value: 'claude-3-7-sonnet', options: ['claude-3-7-sonnet', 'claude-opus-4-5', 'gpt-4o', 'gpt-4o-mini'], description: 'Model powering the CEO Agent' },
       { id: 'fallbackModel', label: 'Fallback Model', type: 'select', value: 'gpt-4o-mini', options: ['gpt-4o-mini', 'claude-3-haiku', 'ollama/llama3'], description: 'Used when primary model is unavailable' },
@@ -27,7 +27,7 @@ const sections = [
   {
     id: 'safety',
     label: 'Safety & Autonomy',
-    icon: Shield,
+    icon: ShieldCheck,
     toggles: [
       { id: 'requireApproval', label: 'Require approval for all executions', value: true, description: 'JT must approve before Hermes or any agent acts' },
       { id: 'noRealWorld', label: 'Block autonomous real-world actions (v0.1)', value: true, description: 'No emails sent, no forms submitted, no purchases made without approval', locked: true },
@@ -244,8 +244,8 @@ export default function SettingsPage() {
           style={{ alignSelf: 'flex-start', padding: '10px 24px', fontSize: 14 }}
           onClick={handleSave}
         >
-          <Save size={14} />
-          {saved ? '✓ Saved' : 'Save Settings'}
+          {saved ? <Check size={14} weight="bold" /> : <FloppyDisk size={14} />}
+          {saved ? 'Saved' : 'Save Settings'}
         </button>
       </div>
     </div>

@@ -1,6 +1,21 @@
 import { listSubscriptions } from '@/lib/data/queries';
 import { Subscription } from '@/lib/types';
-import { Lightbulb } from '@phosphor-icons/react/dist/ssr';
+import {
+  Brain, Code, MagnifyingGlass, Cloud, Kanban, Lightning,
+  Image, Robot, CreditCard, Lightbulb,
+} from '@phosphor-icons/react/dist/ssr';
+import type { Icon } from '@phosphor-icons/react';
+
+const categoryIcon: Record<string, { icon: Icon; color: string; bg: string }> = {
+  'AI Models':            { icon: Brain,            color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
+  'Dev Tools':            { icon: Code,             color: '#5bbcff',  bg: 'rgba(91,188,255,0.08)' },
+  'AI Research':          { icon: MagnifyingGlass,  color: '#a855f7',  bg: 'rgba(168,85,247,0.08)' },
+  'Infrastructure':       { icon: Cloud,            color: '#f59e0b',  bg: 'rgba(245,158,11,0.08)' },
+  'Project Management':   { icon: Kanban,           color: '#60a5fa',  bg: 'rgba(96,165,250,0.08)' },
+  'Productivity':         { icon: Lightning,        color: '#c2ff00',  bg: 'rgba(194,255,0,0.08)' },
+  'AI Image':             { icon: Image,            color: '#fb923c',  bg: 'rgba(251,146,60,0.08)' },
+  'AI Agent':             { icon: Robot,            color: '#a855f7',  bg: 'rgba(168,85,247,0.08)' },
+};
 
 const usageColors = {
   low: { bg: 'rgba(244,63,94,0.1)', text: 'var(--red)' },
@@ -67,6 +82,8 @@ function SubscriptionCard({ sub, index }: { sub: Subscription; index: number }) 
   const uc = usageColors[sub.usage];
   const scoreColor = sub.valueScore >= 7 ? 'var(--green)' : sub.valueScore >= 5 ? 'var(--yellow)' : 'var(--red)';
   const isRenewingSoon = days <= 7;
+  const ci = categoryIcon[sub.category] ?? { icon: CreditCard, color: 'var(--text-muted)', bg: 'var(--bg-elevated)' };
+  const CatIcon = ci.icon;
 
   return (
     <div
@@ -83,16 +100,15 @@ function SubscriptionCard({ sub, index }: { sub: Subscription; index: number }) 
             width: 40,
             height: 40,
             borderRadius: 10,
-            background: 'var(--bg-elevated)',
-            border: '1px solid var(--border)',
+            background: ci.bg,
+            border: `1px solid color-mix(in srgb, ${ci.color} 25%, transparent)`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: 22,
             flexShrink: 0,
           }}
         >
-          {sub.logoEmoji}
+          <CatIcon size={20} weight="fill" color={ci.color} />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontWeight: 700, fontSize: 14 }}>{sub.name}</div>

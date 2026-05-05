@@ -474,7 +474,7 @@ function HireForm({ onCancel, onHired }: { onCancel: () => void; onHired: () => 
   const [division, setDivision] = useState<AgentDivision>('Shared Services');
   const [systemPrompt, setSystemPrompt] = useState('');
   const [capabilities, setCapabilities] = useState('');
-  const [avatar, setAvatar] = useState('🤖');
+  const avatar = '🤖'; // kept for API compat; not shown in UI (division icon used instead)
   const [hireReason, setHireReason] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -534,8 +534,7 @@ function HireForm({ onCancel, onHired }: { onCancel: () => void; onHired: () => 
 
       {tab === 'manual' && (
       <form onSubmit={submit} style={{ display: 'grid', gap: 10 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 1fr', gap: 8 }}>
-        <Input label="Avatar" value={avatar} onChange={setAvatar} placeholder="🤖" />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
         <Input label="Name" value={name} onChange={setName} placeholder="Atlas" required />
         <Input label="Role" value={role} onChange={setRole} placeholder="Research analyst" required />
       </div>

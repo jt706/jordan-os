@@ -1,5 +1,5 @@
 import { listSubscriptions } from '@/lib/data/queries';
-import { Minus } from 'lucide-react';
+import { Minus, CurrencyDollar } from '@phosphor-icons/react/dist/ssr';
 
 // Money page reads from the real `subscriptions` table only. Anything we
 // can't compute from a real source (value created, ROI, monthly trend)
@@ -48,7 +48,9 @@ export default async function MoneyPage() {
           className="card animate-fade-up delay-1"
           style={{ padding: 24, textAlign: 'center', marginBottom: 16 }}
         >
-          <div style={{ fontSize: 32, marginBottom: 8 }}>💸</div>
+          <div style={{ marginBottom: 8, display: 'flex', justifyContent: 'center' }}>
+            <CurrencyDollar size={40} color="var(--text-dim)" weight="thin" />
+          </div>
           <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>
             No subscriptions tracked yet.
           </div>
